@@ -2,8 +2,9 @@ package com.example.academate.ui.presentation.signup_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.academate.data.AuthRepository
+import com.example.academate.data.repository.AuthRepository
 import com.example.academate.ui.presentation.login_screen.SignInState
+import com.example.academate.data.Resource
 import com.example.academate.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
