@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -101,7 +102,7 @@ fun NavigasiBar(
 //                    onClick = { onItemClick(item.route) },
                     { onItemClick(item.route, navController = navController) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.Blue,
+                        selectedIconColor = colorResource(id = R.color.blue1),
                         unselectedIconColor = Color.Gray
                     ),
                     icon = {
@@ -132,66 +133,4 @@ fun NavigasiBar(
 fun onItemClick(route: String, navController: NavController) {
     navController.navigate(route)
 
-}
-
-@Composable
-fun Navigasi(
-    navController: NavHostController
-) {
-    NavHost(navController = navController, startDestination = Route.SPLASHSCREEN) {
-        composable(Route.SPLASHSCREEN) {
-            SplashScreen(navController)
-        }
-        composable(Route.ONBOARDING1) {
-            onBoarding1(navController)
-        }
-        composable(Route.ONBOARDING2) {
-            onBoarding2(navController)
-        }
-        composable(Route.LOGIN){
-            Login(navController)
-        }
-        composable(Route.SIGNUP){
-            SignUp(navController)
-        }
-
-        composable(Route.HOME) {
-            HomeScreen(navController)
-        }
-        composable(Route.MATAKULIAH) {
-            MataKuliah(navController)
-        }
-        composable(Route.INFORMASIRPL) {
-            InformasiRPL(navController)
-        }
-        composable(Route.DAFTARMENTORRPL){
-            DaftarMentor(navController)
-        }
-        composable(Route.INFORMASIMENTOR) {
-            InformasiMentor()
-        }
-        composable(Route.SEARCH) {
-            SearchScreen(navController)
-
-        }
-        composable(Route.PROFILE) {
-            Profil(navController)
-        }
-        composable(Route.FORMMENTOR){
-            FormMentor(navController)
-        }
-        composable(Route.PEMBERITAHUANBEMENTOR){
-            PemberitahuanBeMentor(navController)
-        }
-        composable(Route.RIWAYAT){
-            Riwayat(navController)
-        }
-        composable(Route.REVIEWMENTOR){
-            ReviewMentor(navController)
-        }
-        composable(Route.INPUTREVIEWMENTOR){
-            InputReviewMentor(navController)
-        }
-
-    }
 }

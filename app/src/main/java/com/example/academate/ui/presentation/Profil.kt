@@ -87,7 +87,7 @@ fun Profil(navController: NavController) {
                     painter = painterResource(id = R.drawable.foto_profil),
                     contentDescription = "profil",
                     modifier = Modifier
-                        .size(width = 170.dp, height = 190.dp)
+                        .size(width = 160.dp, height = 180.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -126,22 +126,21 @@ fun ProfilMenu(navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { /* Handle button click */ }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Star,
                     contentDescription = "be_a_mentor",
-                    modifier = Modifier.size(36.dp),
-
+                    modifier = Modifier.size(32.dp),
                 )
                 ClickableText(
                     text = AnnotatedString("Be a Mentor"),
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                     ),
                     onClick = {
                         navController.navigate(Route.FORMMENTOR)
-                    })
+                    }
+                )
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -149,37 +148,41 @@ fun ProfilMenu(navController: NavController) {
                 modifier = Modifier
                     .padding(8.dp)
                     .height(IntrinsicSize.Min)
-                    .clickable { /* Handle button click */ }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = "riwayat",
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(32.dp)
                 )
                 ClickableText(
                     text = AnnotatedString("Riwayat"),
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                     ),
                     onClick = {
                         navController.navigate(Route.RIWAYAT)
-                    })
+                    }
+                )
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { /* Handle button click */ }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ExitToApp,
                     contentDescription = "logout",
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(32.dp)
                 )
-                Text(
-                    text = "Logout",
-                    fontSize = 18.sp
+                ClickableText(
+                    text = AnnotatedString("Logout"),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontSize = 16.sp,
+                    ),
+                    onClick = {
+                        navController.navigate(Route.LOGIN)
+                    }
                 )
             }
         }

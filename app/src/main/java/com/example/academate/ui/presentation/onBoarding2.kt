@@ -40,7 +40,7 @@ fun onBoarding2(navController: NavController) {
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(Biru)
+            .background(colorResource(id = R.color.blue1))
             .padding(start = 16.dp, end = 10.dp, bottom = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom

@@ -117,6 +117,7 @@ fun SignUp(navController: NavController) {
                     value = email,
                     onValueChange = {email = it},
                     label = { Text(text = "Email")},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Email,
@@ -146,7 +147,6 @@ fun SignUp(navController: NavController) {
                 Button(
                     onClick = {
                               navController.navigate(Route.HOME)
-
                     },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -165,7 +165,9 @@ fun SignUp(navController: NavController) {
                             .align(Alignment.CenterVertically)
                     )
                     TextButton(
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            navController.navigate(Route.LOGIN)
+                        }
                     ) {
                         Text(
                             text = "Login",

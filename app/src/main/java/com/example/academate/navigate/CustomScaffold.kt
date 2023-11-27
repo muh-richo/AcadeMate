@@ -19,6 +19,6 @@ fun CustomScaffold(
             if (showBottomBar)
                 NavigasiBar(navController = navController, onItemClick = {})
         },
-        content =content
+        content = content
     )
 }

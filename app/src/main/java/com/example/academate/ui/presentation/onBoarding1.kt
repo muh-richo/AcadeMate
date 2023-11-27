@@ -42,7 +42,7 @@ fun onBoarding1(navController: NavController) {
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(Biru)
+            .background(colorResource(id = R.color.blue1))
             .padding(start = 16.dp, end = 10.dp, bottom = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
@@ -107,14 +107,14 @@ fun onBoarding1(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.circle),
                     contentDescription = null,
-                    tint = Color.Gray,
+                    tint = Color.White,
                     modifier = Modifier.size(12.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.circle),
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = Color.Gray,
                     modifier = Modifier.size(12.dp)
                 )
             }

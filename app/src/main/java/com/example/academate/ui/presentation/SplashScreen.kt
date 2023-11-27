@@ -70,7 +70,7 @@ fun SplashScreen(navController: NavController) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Biru),
+                .background(colorResource(id = R.color.blue1)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ){

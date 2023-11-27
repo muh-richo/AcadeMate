@@ -18,10 +18,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,16 +34,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.BiruMuda
 import com.example.academate.ui.theme.Putih
@@ -49,7 +57,7 @@ import com.example.academate.ui.theme.matkul2
 import com.example.academate.ui.theme.matkul3
 
 @Composable
-fun InformasiMentor(){
+fun InformasiMentor(navController: NavController){
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
@@ -65,7 +73,7 @@ fun InformasiMentor(){
                 )
             )
     ){
-        HeaderMentor()
+        HeaderMentor(navController)
 
         val scrollState = rememberScrollState()
         Column(
@@ -79,25 +87,25 @@ fun InformasiMentor(){
 
 @Composable
 fun HeaderMentor(
-    modifier: Modifier = Modifier
+    navController: NavController
 ){
     Row(
         horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
     ) {
-        Icon(painter = painterResource(id = R.drawable.arrowleft),
-            contentDescription = "Back",
-            modifier = Modifier
-                .size(29.dp)
-                .padding(end = 8.dp),
-            tint = Color.Black)
-
+        IconButton(
+            onClick = { navController.navigate(Route.HOME) },
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack, contentDescription = "Back"
+            )
+        }
         Text(
             text = "Informasi Mentor",
             fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         )
     }
@@ -118,17 +126,18 @@ fun DeskripsiMentor(){
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.5f)
+                    .shadow(8.dp)
             )
         }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(color = Color.White)
+//                .background(color = Color.White)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(start = 15.dp, end = 15.dp)
+                    .padding(15.dp)
             ) {
                 Row(
                     verticalAlignment= Alignment.CenterVertically,
@@ -138,7 +147,8 @@ fun DeskripsiMentor(){
                 ) {
                     Text(
                         text = "Aziz Purnomo",
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = "40.000 IDR / per section",
@@ -173,31 +183,6 @@ fun DeskripsiMentor(){
                     modifier = Modifier
                         .padding(bottom = 10.dp)
                 )
-
-                Row(
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                ) {
-                    Text(
-                        text = "Jaringan Saraf Tiruan",
-                        fontSize = 11.sp,
-                        color = matkul,
-                        modifier = Modifier
-                            .padding(end = 15.dp)
-                    )
-                    Text(
-                        text = "Basis Data",
-                        fontSize = 11.sp,
-                        color = matkul2,
-                        modifier = Modifier
-                            .padding(end = 15.dp)
-                    )
-                    Text(
-                        text = "Jaringan Komputer",
-                        fontSize = 11.sp,
-                        color = matkul3
-                    )
-                }
 
                 Text(
                     text = "Tempat",
@@ -257,14 +242,13 @@ fun ButtonMentor(
 ){
     var showDialog by remember { mutableStateOf(false) }
     Button(
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.blue1)),
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
             .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 20.dp),
-        colors = ButtonDefaults.buttonColors(Color.Blue),
         onClick = {
             showDialog = true
-
         }) {
         Text(
             text = "Sewa Mentor",
@@ -283,12 +267,13 @@ fun ButtonMentor(
                 modifier = Modifier
                     .border(
                         shape = RoundedCornerShape(22.dp),
-                        border = BorderStroke(2.dp, BiruMuda)
+                        border = BorderStroke(1.dp, colorResource(id = R.color.blue1))
                     ),
                 title = {
                     Text(
                         text = "Konfirmasi Pesanan?",
-                        color = Color.Blue
+                        textAlign = TextAlign.Center,
+                        color = colorResource(id = R.color.blue1)
                     )
                 },
 
@@ -300,7 +285,7 @@ fun ButtonMentor(
                         modifier = Modifier
                             .height(35.dp)
                             .width(120.dp),
-                        colors = ButtonDefaults.buttonColors(Color.Blue)
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.blue1))
                     ) {
                         Text(
                             text = "Konfirmasi",
@@ -320,7 +305,7 @@ fun ButtonMentor(
                     ) {
                         Text(
                             text = "Batal",
-                            color = Color.Blue
+                            color = colorResource(id = R.color.blue1)
                         )
                     }
                 }

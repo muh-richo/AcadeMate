@@ -103,6 +103,7 @@ fun Login(navController: NavController) {
                     value = email,
                     onValueChange = {email = it},
                     label = { Text(text = "Email")},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Email,

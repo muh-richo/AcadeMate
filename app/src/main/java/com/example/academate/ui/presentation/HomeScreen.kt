@@ -30,7 +30,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +53,7 @@ fun HomeScreen(navController: NavController){
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Biru,
+                        colorResource(id = R.color.blue1),
                         Putih
                     ),
                     startY = 300f
@@ -75,19 +77,16 @@ fun HomeScreen(navController: NavController){
                 ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor),
                     nama = "Arif Rama Putra Sa’id",
                     matakuliah = "Jaringan Saraf Tiruan",
-                    followers = "69 Followers",
                     navController = navController
                 )
                 ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor3),
                     nama = "M Richo Abadinata",
                     matakuliah = "Pemrograman Dasar",
-                    followers = "1 jt Followers",
                     navController = navController
                 )
                 ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor2),
                     nama = "Aziz Purnomo",
                     matakuliah = "Rekayasa Perangkat Lunak",
-                    followers = "113 Followers",
                     navController = navController
                 )
             }
@@ -115,8 +114,6 @@ fun HomeScreen(navController: NavController){
             DaftarMataKuliahDiminati(painter = painter4, matakuliah = matakuliah4, fakultas = fakultas4, navController = navController)
 
         }
-
-
     }
 }
 
@@ -132,12 +129,13 @@ fun Greet(
         Column(
             modifier = Modifier
                 .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            BiruMuda,
-                            Putih
-                        )
-                    )
+                    Color.Transparent
+//                    Brush.horizontalGradient(
+//                        colors = listOf(
+//                            BiruMuda,
+//                            Putih
+//                        )
+//                    )
                 )
                 .fillMaxWidth()
                 .padding(15.dp)
@@ -168,7 +166,8 @@ fun MentorTerbaik(){
     ) {
         Text(
             text = "Mentor terbaik minggu ini",
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -179,12 +178,11 @@ fun ListMentorTerbaik(
     painter: Painter,
     nama: String,
     matakuliah: String,
-    followers: String,
     navController: NavController
 ){
     Column(
         modifier = Modifier
-            .padding(start = 15.dp,)
+            .padding(start = 12.dp)
     ) {
         Card(
             shape = RoundedCornerShape(15.dp),
@@ -198,26 +196,29 @@ fun ListMentorTerbaik(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(bottom = 16.dp)
                     .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                BiruMuda,
-                                Putih
-                            ),
-                            startY = 100f
-                        )
+//                        Brush.verticalGradient(
+//                            colors = listOf(
+//                                BiruMuda,
+//                                Putih
+//                            ),
+//                            startY = 100f
+//                        )
+                        Color.Transparent
                     )
             ) {
-                roundImage(painter)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .padding(start = 12.dp)
+                        .fillMaxSize()
                 ) {
+                    roundImage(painter)
                     Text(
                         text = nama,
                         fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .padding(bottom = 3.dp)
                     )
@@ -225,11 +226,7 @@ fun ListMentorTerbaik(
                         text = matakuliah,
                         fontSize = 10.sp,
                         modifier = Modifier
-                            .padding(bottom = 5.dp)
-                    )
-                    Text(
-                        text = followers,
-                        fontSize = 10.sp
+                            .padding(bottom = 6.dp)
                     )
                 }
             }
@@ -261,7 +258,8 @@ fun matakuiliahDiminati(){
     ) {
         Text(
             text = "Mata kuliah banyak diminati",
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
