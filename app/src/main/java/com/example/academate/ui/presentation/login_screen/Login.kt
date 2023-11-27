@@ -193,8 +193,6 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
             LaunchedEffect(key1 = state.value?.isSuccess) {
                 scope.launch {
                     if (state.value?.isSuccess?.isNotEmpty() == true) {
-                        val success = state.value?.isSuccess
-//                Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
                         Toast.makeText(context, "Berhasil login!", Toast.LENGTH_SHORT).show()
                         navController.navigate(Route.HOME)
                     }
@@ -204,8 +202,6 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
             LaunchedEffect(key1 = state.value?.isError) {
                 scope.launch {
                     if (state.value?.isError?.isNotEmpty() == true) {
-                        val error = state.value?.isError
-//                Toast.makeText(context, "${error}", Toast.LENGTH_LONG).show()
                         Toast.makeText(context, "Gagal login!", Toast.LENGTH_SHORT).show()
                     }
                 }
