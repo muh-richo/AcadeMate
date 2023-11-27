@@ -1,4 +1,4 @@
-package com.example.myapplication.util
+package com.example.academate.util
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
     class Success<T>(data: T) : Resource<T>(data)

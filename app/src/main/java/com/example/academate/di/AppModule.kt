@@ -1,7 +1,7 @@
-package com.example.myapplication.di
+package com.example.academate.di
 
-import com.example.myapplication.data.AuthRepository
-import com.example.myapplication.data.AuthRepositoryImpl
+import com.example.academate.data.AuthRepository
+import com.example.academate.data.AuthRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
