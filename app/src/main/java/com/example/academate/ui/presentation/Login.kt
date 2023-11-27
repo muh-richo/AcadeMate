@@ -44,12 +44,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.AcadeMateTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onNextClick: () -> Unit) {
+fun Login(navController: NavController) {
     var email by remember {
         mutableStateOf("")
     }
@@ -128,7 +130,9 @@ fun LoginScreen(onNextClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
-                    onClick = {  },
+                    onClick = {
+                              navController.navigate(Route.HOME)
+                    },
                     modifier = Modifier
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
@@ -146,25 +150,18 @@ fun LoginScreen(onNextClick: () -> Unit) {
                             .align(Alignment.CenterVertically)
                     )
                     TextButton(
-                        onClick = onNextClick
+                        onClick = {
+                            navController.navigate(Route.SIGNUP)
+
+                        }
                     ) {
                         Text(
                             text = "Sign Up",
-                            color = colorResource(id = R.color.blue1)
+                            color = colorResource(id = R.color.blue1),
                         )
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    AcadeMateTheme {
-        LoginScreen(onNextClick = {
-
-        })
     }
 }

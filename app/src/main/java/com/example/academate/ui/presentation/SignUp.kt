@@ -41,12 +41,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.AcadeMateTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(onNextClick: () -> Unit) {
+fun SignUp(navController: NavController) {
     var username by remember {
         mutableStateOf("")
     }
@@ -142,7 +144,10 @@ fun SignUpScreen(onNextClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
-                    onClick = onNextClick,
+                    onClick = {
+                              navController.navigate(Route.HOME)
+
+                    },
                     modifier = Modifier
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
@@ -170,13 +175,5 @@ fun SignUpScreen(onNextClick: () -> Unit) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpPreview() {
-    AcadeMateTheme {
-//        SignUpScreen()
     }
 }
