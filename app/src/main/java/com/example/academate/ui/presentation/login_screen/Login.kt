@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,7 +115,10 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
                     value = email,
                     onValueChange = {email = it},
                     label = { Text(text = "Email")},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Email,
@@ -129,7 +133,10 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
                     value = password,
                     onValueChange = {password = it},
                     label = { Text(text = "Password")},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
                     visualTransformation = PasswordVisualTransformation(),
                     trailingIcon = {
                         Icon(
