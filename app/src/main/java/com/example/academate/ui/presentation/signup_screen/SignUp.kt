@@ -157,7 +157,6 @@ fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewMo
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
-//                              navController.navigate(Route.HOME)
                         scope.launch {
                             viewModel.registerUser(email, password)
                         }
@@ -206,6 +205,7 @@ fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewMo
                     if (state.value?.isSuccess?.isNotEmpty() == true) {
                         val success = state.value?.isSuccess
                         Toast.makeText(context, "Berhasil membuat akun, silahkan login!", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Route.LOGIN)
                     }
                 }
             }

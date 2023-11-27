@@ -196,6 +196,7 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
                         val success = state.value?.isSuccess
 //                Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
                         Toast.makeText(context, "Berhasil login!", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Route.HOME)
                     }
                 }
             }
