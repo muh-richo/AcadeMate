@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
@@ -35,6 +36,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -87,13 +89,20 @@ fun Profil(navController: NavController) {
                     painter = painterResource(id = R.drawable.foto_profil),
                     contentDescription = "profil",
                     modifier = Modifier
-                        .size(width = 160.dp, height = 180.dp)
+                        .size(width = 160.dp, height = 160.dp)
+                        .clip(CircleShape)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Bagus Satrio",
+                    text = "M Richo Abadinata",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold ,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Member",
+                    fontSize = 12.sp,
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(36.dp))

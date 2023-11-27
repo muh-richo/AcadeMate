@@ -66,7 +66,7 @@ fun HomeScreen(navController: NavController){
             modifier = Modifier
                 .verticalScroll(scrollState)
         ) {
-            Greet("Aziz")
+            Greet()
             MentorTerbaik()
 
             val scrollState = rememberScrollState()
@@ -119,7 +119,7 @@ fun HomeScreen(navController: NavController){
 
 @Composable
 fun Greet(
-    nama: String
+//    nama: String
 ){
     Card(
         modifier = Modifier
@@ -142,7 +142,7 @@ fun Greet(
 
         ) {
             Text(
-                text = "Selamat Datang $nama!",
+                text = "Selamat Datang!",
                 fontSize = 18.sp,
                 modifier = Modifier
                     .padding(bottom = 5.dp)
