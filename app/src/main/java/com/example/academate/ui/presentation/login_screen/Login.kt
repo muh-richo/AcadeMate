@@ -1,5 +1,6 @@
 package com.example.academate.ui.presentation.login_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,13 +31,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,20 +50,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.AcadeMateTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(navController: NavController) {
+fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewModel()) {
     var email by remember {
         mutableStateOf("")
     }
     var password by remember {
         mutableStateOf("")
     }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val state = viewModel.signInState.collectAsState(initial = null)
 
     Column(
         modifier = Modifier
@@ -132,7 +143,11 @@ fun Login(navController: NavController) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
-                              navController.navigate(Route.HOME)
+//                              navController.navigate(Route.HOME)
+//                        menambahkan login
+                        scope.launch {
+                            viewModel.loginUser(email, password)
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -143,6 +158,19 @@ fun Login(navController: NavController) {
                         text = "Login"
                     )
                 }
+
+//                menambahkan loading setelah submit
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (state.value?.isLoading == true) {
+                        CircularProgressIndicator()
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     Text(
@@ -153,13 +181,31 @@ fun Login(navController: NavController) {
                     TextButton(
                         onClick = {
                             navController.navigate(Route.SIGNUP)
-
                         }
                     ) {
                         Text(
                             text = "Sign Up",
                             color = colorResource(id = R.color.blue1),
                         )
+                    }
+                }
+            }
+            LaunchedEffect(key1 = state.value?.isSuccess) {
+                scope.launch {
+                    if (state.value?.isSuccess?.isNotEmpty() == true) {
+                        val success = state.value?.isSuccess
+//                Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Berhasil login!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            LaunchedEffect(key1 = state.value?.isError) {
+                scope.launch {
+                    if (state.value?.isError?.isNotEmpty() == true) {
+                        val error = state.value?.isError
+//                Toast.makeText(context, "${error}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Gagal login!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -27,8 +27,10 @@ import com.example.academate.navigate.CustomScaffold
 import com.example.academate.navigate.Navigasi
 import com.example.academate.navigate.Route
 import com.example.academate.ui.presentation.DaftarMentor
+import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     val showBar = listOf(
