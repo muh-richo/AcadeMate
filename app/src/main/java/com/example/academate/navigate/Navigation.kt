@@ -11,13 +11,13 @@ import com.example.academate.ui.presentation.HomeScreen
 import com.example.academate.ui.presentation.InformasiMentor
 import com.example.academate.ui.presentation.InformasiRPL
 import com.example.academate.ui.presentation.InputReviewMentor
-import com.example.academate.ui.presentation.Login
+import com.example.academate.ui.presentation.login_screen.Login
 import com.example.academate.ui.presentation.MataKuliah
 import com.example.academate.ui.presentation.PemberitahuanBeMentor
 import com.example.academate.ui.presentation.Profil
 import com.example.academate.ui.presentation.ReviewMentor
 import com.example.academate.ui.presentation.Riwayat
-import com.example.academate.ui.presentation.SignUp
+import com.example.academate.ui.presentation.signup_screen.SignUp
 import com.example.academate.ui.presentation.SplashScreen
 import com.example.academate.ui.presentation.onBoarding1
 import com.example.academate.ui.presentation.onBoarding2

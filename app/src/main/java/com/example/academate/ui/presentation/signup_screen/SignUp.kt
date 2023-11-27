@@ -1,4 +1,4 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.signup_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
