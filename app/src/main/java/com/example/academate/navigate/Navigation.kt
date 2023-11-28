@@ -9,6 +9,7 @@ import com.example.academate.ui.presentation.DaftarMentor
 import com.example.academate.ui.presentation.FormMentor
 import com.example.academate.ui.presentation.HomeScreen
 import com.example.academate.ui.presentation.InformasiMentor
+import com.example.academate.ui.presentation.InformasiPembayaran
 import com.example.academate.ui.presentation.InformasiRPL
 import com.example.academate.ui.presentation.InputReviewMentor
 import com.example.academate.ui.presentation.login_screen.Login
@@ -42,7 +43,6 @@ fun Navigasi(
         composable(Route.SIGNUP){
             SignUp(navController)
         }
-
         composable(Route.HOME) {
             HomeScreen(navController)
         }
@@ -54,6 +54,9 @@ fun Navigasi(
         }
         composable(Route.DAFTARMENTORRPL){
             DaftarMentor(navController)
+        }
+        composable(Route.INFORMASIPEMBAYARAN){
+            InformasiPembayaran(navController)
         }
         composable(Route.INFORMASIMENTOR) {
             InformasiMentor(navController)

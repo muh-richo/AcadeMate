@@ -80,7 +80,7 @@ fun InformasiMentor(navController: NavController){
             modifier = Modifier.verticalScroll(scrollState)
         ) {
             DeskripsiMentor()
-            ButtonMentor()
+            ButtonMentor(navController = navController)
         }
     }
 }
@@ -238,7 +238,8 @@ fun DeskripsiMentor(){
 
 @Composable
 fun ButtonMentor(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ){
     var showDialog by remember { mutableStateOf(false) }
     Button(
@@ -280,7 +281,7 @@ fun ButtonMentor(
                 confirmButton = {
                     Button(
                         onClick = {
-                            showDialog = false
+                            navController.navigate(Route.INFORMASIPEMBAYARAN)
                         },
                         modifier = Modifier
                             .height(35.dp)

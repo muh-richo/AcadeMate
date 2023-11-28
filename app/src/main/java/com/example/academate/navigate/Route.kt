@@ -11,6 +11,7 @@ object Route {
     const val INFORMASIRPL = "informasiRPL"
     const val DAFTARMENTORRPL = "daftarmentorRPL"
     const val INFORMASIMENTOR = "informasiMentor"
+    const val INFORMASIPEMBAYARAN = "infromasiPembayaran"
     const val SEARCH = "search"
     const val PROFILE = "profile"
     const val FORMMENTOR = "formmentor"

@@ -3,7 +3,6 @@ package com.example.academate.ui.presentation.login_screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.academate.data.repository.AuthRepository
-import com.example.academate.data.Resource
 import com.example.academate.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -22,7 +21,7 @@ class SignInViewModel @Inject constructor(
 
     fun loginUser(email: String, password: String) = viewModelScope.launch {
         repository.loginUser(email, password).collect { result ->
-            when (result) {
+            when (result){
                 is Resource.Success -> {
                     _signInState.send(SignInState(isSuccess = "Sign In Success "))
                 }
@@ -30,8 +29,11 @@ class SignInViewModel @Inject constructor(
                     _signInState.send(SignInState(isLoading = true))
                 }
                 is Resource.Error -> {
-
                     _signInState.send(SignInState(isError = result.message))
+                }
+                else -> {
+                    // Handle any unexpected cases here
+                    _signInState.send(SignInState(isError = "Unexpected result"))
                 }
             }
 
