@@ -63,6 +63,7 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
     // inisialisasi database
     val database = FirebaseDatabase.getInstance()
     val users = database.getReference("users") // pointer ke root users
+    val mentorRef = database.getReference("mentors")
 
     // mutable state untuk form
     var email by remember { mutableStateOf("") }
@@ -71,6 +72,38 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val state = viewModel.signInState.collectAsState(initial = null)
+
+    mentorRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+
+            (snapshotValue as? Map<String, Any>)?.forEach { (key, value) ->
+                val currentUserCheck = mentorRef.child(key)
+                currentUserCheck.addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+                        val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
+
+                        var name = map?.get("nama_lengkap").toString()
+                        var course = map?.get("course").toString()
+
+                        // set data
+                        viewModelUser.addToNameList(name)
+                        viewModelUser.addToCourseList(course)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                    }
+                })
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+        }
+    })
 
     Column(
         modifier = Modifier

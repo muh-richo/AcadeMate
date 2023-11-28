@@ -1,6 +1,8 @@
 package com.example.academate.ui.presentation
 
+import android.content.ContentValues
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +40,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,20 +56,27 @@ import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.BiruMuda
 import com.example.academate.ui.theme.Putih
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
+
+    val name by viewModelUser.nameList.collectAsState()
+    val course by viewModelUser.courseList.collectAsState()
+
+    val nameList = name.toList()
+    val courseList = course.toList()
 
     // inisialisasi untuk username yang sudah di dapatkan di login
     val username by viewModelUser.username.collectAsState()
     Log.w("username", username)
 
-    // inisialisasi database
-    var database = FirebaseDatabase.getInstance()
-    var myRef = database.getReference("users") // pointer untuk root users
-    var mentorRef = database.getReference("mentors") // pointer untuk root mentor
-
+    // count mentor
+    var mentorCount = name.size
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
@@ -84,28 +99,37 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
                 .verticalScroll(scrollState)
         ) {
             Greet(username)
+            Text(text = mentorCount.toString())
+            Log.w("ukurang", mentorCount.toString())
             MentorTerbaik()
 
             val scrollState = rememberScrollState()
-            Row(
+            LazyRow(
                 modifier = Modifier
-                    .horizontalScroll(scrollState)
+//                    .horizontalScroll(scrollState)
             ) {
-                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor),
-                    nama = "Arif Rama Putra Sa’id",
-                    matakuliah = "Jaringan Saraf Tiruan",
-                    navController = navController
-                )
-                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor3),
-                    nama = "M Richo Abadinata",
-                    matakuliah = "Pemrograman Dasar",
-                    navController = navController
-                )
-                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor2),
-                    nama = "Aziz Purnomo",
-                    matakuliah = "Rekayasa Perangkat Lunak",
-                    navController = navController
-                )
+                items(nameList.size){currentIndex ->
+                    ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor),
+                        nama = nameList[currentIndex],
+                        matakuliah = courseList[currentIndex],
+                        navController = navController
+                    )
+                }
+//                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor),
+//                    nama = "Arif Rama Putra Sa’id",
+//                    matakuliah = "Jaringan Saraf Tiruan",
+//                    navController = navController
+//                )
+//                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor3),
+//                    nama = "M Richo Abadinata",
+//                    matakuliah = "Pemrograman Dasar",
+//                    navController = navController
+//                )
+//                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor2),
+//                    nama = "Aziz Purnomo",
+//                    matakuliah = "Rekayasa Perangkat Lunak",
+//                    navController = navController
+//                )
             }
 
             matakuiliahDiminati()
