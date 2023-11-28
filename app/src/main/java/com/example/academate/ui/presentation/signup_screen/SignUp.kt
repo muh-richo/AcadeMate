@@ -52,20 +52,21 @@ import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.AcadeMateTheme
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewModel()) {
-    var username by remember {
-        mutableStateOf("")
-    }
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val myRef = database.getReference("users") // pointer ke reference "users"
+
+    // mutable state untuk form
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val state = viewModel.signUpState.collectAsState(initial = null)
@@ -157,6 +158,12 @@ fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewMo
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
+                        // membuat user baru di root "users"
+                        var userRef = myRef.child(username)
+                        var user = User(email, password)
+                        userRef.setValue(user)
+
+                        // menjalankan autentikasi Register
                         scope.launch {
                             viewModel.registerUser(email, password)
                         }
@@ -217,6 +224,10 @@ fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewMo
                     }
                 }
             }
+
         }
     }
 }
+
+// untuk menyimpan data email dan password, yang akan dimasukkan ke database (logic ada di  onClick button
+data class User(var email: String, var password: String, var isMentor: Boolean = false)
