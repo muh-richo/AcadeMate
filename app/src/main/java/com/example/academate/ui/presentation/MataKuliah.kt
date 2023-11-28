@@ -14,16 +14,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,6 +43,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -40,13 +52,37 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.academate.R
+import com.example.academate.data.MataKuliahRepository
+import com.example.academate.data.model.MataKuliahModelResponse
 import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
+import com.example.academate.util.Resource
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun MataKuliah(navController: NavController){
+fun MataKuliah(navController: NavController) {
+
+    val mataKuliahRepository = MataKuliahRepository()
+    val scope = rememberCoroutineScope()
+    var matkul by remember {
+        mutableStateOf<List<MataKuliahModelResponse>>(emptyList())
+    }
+
+    LaunchedEffect(key1 = true, block = {
+        scope.launch {
+            mataKuliahRepository.getMataKuliah().collect {
+                when (it) {
+                    is Resource.Error -> {}
+                    is Resource.Loading -> {}
+                    is Resource.Success -> matkul = it.data!!
+                }
+            }
+        }
+    })
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
@@ -61,49 +97,19 @@ fun MataKuliah(navController: NavController){
                 )
             )
     ) {
-        Header()
+        Header(navController)
 
-        val scrollState = rememberScrollState()
-        Column(
-            modifier = Modifier.verticalScroll(scrollState)
-        ) {
-            val painter = painterResource(id = R.drawable.matakuliah_rpl)
-            val matakuliah = "Rekayasa Perangkat Lunak"
-            val fakultas = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter, matakuliah = matakuliah, fakultas = fakultas, navController=navController)
-
-            val painter2 = painterResource(id = R.drawable.matakuliah_jst)
-            val matakuliah2= "Jaringan Saraf Tiruan"
-            val fakultas2 = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter2, matakuliah = matakuliah2, fakultas = fakultas2, navController=navController)
-
-            val painter3 = painterResource(id = R.drawable.matakuliah_pemdas)
-            val matakuliah3 = "Pemrograman Dasar"
-            val fakultas3 = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter3, matakuliah = matakuliah3, fakultas = fakultas3, navController=navController)
-
-            val painter4 = painterResource(id = R.drawable.matakuliah_pemweb)
-            val matakuliah4 = "Pemrograman Web"
-            val fakultas4 = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter4, matakuliah = matakuliah4, fakultas = fakultas4, navController=navController)
-
-            val painter5 = painterResource(id = R.drawable.matakuliah_jarkom)
-            val matakuliah5 = "Jaringan Komputer"
-            val fakultas5 = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter5, matakuliah = matakuliah5, fakultas = fakultas5, navController=navController)
-
-            val painter6 = painterResource(id = R.drawable.matakuliah_ki)
-            val matakuliah6 = "Keamanan Informasi"
-            val fakultas6 = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter6, matakuliah = matakuliah6, fakultas = fakultas6, navController=navController)
-
-            val painter7 = painterResource(id = R.drawable.matakuliah_sismul)
-            val matakuliah7 = "Sistem Multimedia"
-            val fakultas7 = "Fakultas Ilmu Komputer"
-            DaftarMataKuliah(painter = painter7, matakuliah = matakuliah7, fakultas = fakultas7, navController=navController)
-
-            DaftarMataKuliah(painter = painter6, matakuliah = matakuliah6, fakultas = fakultas6, navController=navController)
-
+        LazyColumn() {
+            items(matkul) {
+                DaftarMataKuliah(
+                    painter = painterResource(
+                        id = R.drawable.matakuliah
+                    ),
+                    matakuliah = it.item!!.namaMatkul,
+                    fakultas = it.item!!.desc,
+                    navController = navController
+                )
+            }
         }
     }
 }
@@ -111,25 +117,25 @@ fun MataKuliah(navController: NavController){
 
 @Composable
 fun Header(
+    navController: NavController,
     modifier: Modifier = Modifier
-){
+) {
     Row(
         horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(start = 10.dp, top = 6.dp, end = 10.dp, bottom = 6.dp)
     ) {
-        Icon(painter = painterResource(id = R.drawable.arrowleft),
-            contentDescription = "Back",
-            modifier = Modifier
-                .size(29.dp)
-                .padding(end = 8.dp),
-            tint = Color.Black)
-
+        IconButton(onClick = {
+            navController.popBackStack()
+        }) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+        }
         Text(
             text = "Mata Kuliah",
             fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         )
     }
@@ -143,11 +149,11 @@ fun DaftarMataKuliah(
     fakultas: String,
     modifier: Modifier = Modifier,
     navController: NavController
-){
-
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 6.dp)
     ) {
         Card(
             modifier = Modifier
@@ -163,40 +169,38 @@ fun DaftarMataKuliah(
                     .fillMaxWidth()
             ) {
                 Row {
-                    Box(modifier = Modifier
-                        .height(80.dp)
+                    Box(
+                        modifier = Modifier
+                            .height(80.dp)
 
-                    ){
+                    ) {
                         Image(
                             painter = painter,
-                            contentDescription = "RPL",
+                            contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                         )
-
                     }
 
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 15.dp, top = 10.dp)
-                    ){
+                    ) {
                         Column {
                             Text(
                                 text = matakuliah,
-                                fontSize = 14.sp,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
                                 color = Color.Black,
-
                                 )
 
                             Text(
                                 text = fakultas,
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 color = Color.Gray
                             )
-
-
                         }
                     }
                 }
