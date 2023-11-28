@@ -67,7 +67,7 @@ import com.example.academate.ui.theme.AcadeMateTheme
 fun SearchScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            Search()
+            Search(navController)
         }
     ) { paddingValues ->
         Column(
@@ -85,7 +85,7 @@ fun SearchScreen(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Search() {
+fun Search(navController: NavController) {
     var searchText by remember {
         mutableStateOf("")
     }
@@ -97,7 +97,9 @@ fun Search() {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.popBackStack()
+            }
         ) {
             Icon(
                 imageVector = Icons.Outlined.ArrowBack,

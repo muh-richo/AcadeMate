@@ -1,6 +1,6 @@
 package com.example.academate.data.repository
 
-import com.example.academate.data.Resource
+import com.example.academate.util.Resource
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
