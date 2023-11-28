@@ -48,6 +48,7 @@ import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.BiruMuda
 import com.example.academate.ui.theme.Putih
+import com.google.firebase.database.FirebaseDatabase
 
 @Composable
 fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
@@ -56,6 +57,10 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
     val username by viewModelUser.username.collectAsState()
     Log.w("username", username)
 
+    // inisialisasi database
+    var database = FirebaseDatabase.getInstance()
+    var myRef = database.getReference("users") // pointer untuk root users
+    var mentorRef = database.getReference("mentors") // pointer untuk root mentor
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -210,13 +215,6 @@ fun ListMentorTerbaik(
                     .fillMaxSize()
                     .padding(bottom = 16.dp)
                     .background(
-//                        Brush.verticalGradient(
-//                            colors = listOf(
-//                                BiruMuda,
-//                                Putih
-//                            ),
-//                            startY = 100f
-//                        )
                         Color.Transparent
                     )
             ) {

@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.UserViewModel
+import com.example.academate.ui.presentation.signup_screen.User
+import com.google.firebase.database.FirebaseDatabase
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
@@ -56,7 +60,14 @@ import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormMentor(navController: NavController){
+fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
+    // mengambil username current user
+    val username by viewModelUser.username.collectAsState()
+
+    // inisialisasi database
+    var database = FirebaseDatabase.getInstance()
+    var mentorRef = database.getReference("mentors") // pointer untuk root mentor
+    val currentUser = database.getReference("users").child(username) // pointer ke current user
 
     val scrollState = rememberScrollState()
 
@@ -64,18 +75,11 @@ fun FormMentor(navController: NavController){
         modifier = Modifier
             .verticalScroll(scrollState)
     ) {
-        var name by remember {
-            mutableStateOf("")
-        }
-        var course by remember {
-            mutableStateOf("")
-        }
-        var experience by remember {
-            mutableStateOf("")
-        }
-        var motivation by remember {
-            mutableStateOf("")
-        }
+        var name by remember { mutableStateOf("") }
+        var course by remember { mutableStateOf("") }
+        var experience by remember { mutableStateOf("") }
+        var motivation by remember { mutableStateOf("") }
+
         Column (
             modifier = Modifier
                 .fillMaxSize()
@@ -268,6 +272,17 @@ fun FormMentor(navController: NavController){
 
                     Button(
                         onClick = {
+                            // update key member dari user
+                            val hashMap = hashMapOf<String, Any>() // Membuat HashMap kosong dengan kunci bertipe String dan nilai bertipe Any
+                            hashMap["mentor"] = true // membuat nilai baru dan ditaruh ke hashMap
+                            // update nilai member
+                            currentUser.updateChildren(hashMap)
+
+                            // membuat user baru di root "users"
+                            var userRef = mentorRef.child(username)
+                            var mentor = Mentor(name, course, experience)
+                            userRef.setValue(mentor)
+
                             navController.navigate(Route.PEMBERITAHUANBEMENTOR)
                         },
                         modifier = Modifier
@@ -284,3 +299,6 @@ fun FormMentor(navController: NavController){
         }
     }
 }
+
+// untuk menyimpan data email dan password, yang akan dimasukkan ke database (logic ada di  onClick button
+data class Mentor(var nama_lengkap: String, var course: String, var experience: String, var poin:Int = 0)
