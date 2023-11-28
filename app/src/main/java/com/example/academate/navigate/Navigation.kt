@@ -1,6 +1,7 @@
 package com.example.academate.navigate
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,12 +20,14 @@ import com.example.academate.ui.presentation.ReviewMentor
 import com.example.academate.ui.presentation.Riwayat
 import com.example.academate.ui.presentation.signup_screen.SignUp
 import com.example.academate.ui.presentation.SplashScreen
+import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.presentation.onBoarding1
 import com.example.academate.ui.presentation.onBoarding2
 
 @Composable
 fun Navigasi(
-    navController: NavHostController
+    navController: NavHostController,
+    userViewModel: UserViewModel = viewModel()
 ) {
     NavHost(navController = navController, startDestination = Route.SPLASHSCREEN) {
         composable(Route.SPLASHSCREEN) {
@@ -37,14 +40,14 @@ fun Navigasi(
             onBoarding2(navController)
         }
         composable(Route.LOGIN){
-            Login(navController)
+            Login(navController, userViewModel)
         }
         composable(Route.SIGNUP){
             SignUp(navController)
         }
 
         composable(Route.HOME) {
-            HomeScreen(navController)
+            HomeScreen(navController, userViewModel)
         }
         composable(Route.MATAKULIAH) {
             MataKuliah(navController)

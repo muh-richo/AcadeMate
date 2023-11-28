@@ -1,5 +1,6 @@
 package com.example.academate.ui.presentation
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -23,6 +24,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,15 +39,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.SignInViewModel
+import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.BiruMuda
 import com.example.academate.ui.theme.Putih
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
+
+    // inisialisasi untuk username yang sudah di dapatkan di login
+    val username by viewModelUser.username.collectAsState()
+    Log.w("username", username)
+
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
@@ -66,7 +78,7 @@ fun HomeScreen(navController: NavController){
             modifier = Modifier
                 .verticalScroll(scrollState)
         ) {
-            Greet("Aziz")
+            Greet(username)
             MentorTerbaik()
 
             val scrollState = rememberScrollState()

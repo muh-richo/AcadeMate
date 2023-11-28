@@ -9,6 +9,9 @@ import com.example.academate.util.Resource
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -19,6 +22,8 @@ class SignInViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
+
+    // untuk sign in
     val _signInState = Channel<SignInState>()
     val signInState = _signInState.receiveAsFlow()
 
