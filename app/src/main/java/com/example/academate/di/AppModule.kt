@@ -1,7 +1,7 @@
 package com.example.academate.di
 
-import com.example.academate.data.AuthRepository
-import com.example.academate.data.AuthRepositoryImpl
+import com.example.academate.data.repository.AuthRepository
+import com.example.academate.data.repository.AuthRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesRepositoryImpl(firebaseAuth: FirebaseAuth):AuthRepository{
+    fun providesRepositoryImpl(firebaseAuth: FirebaseAuth): AuthRepository {
         return AuthRepositoryImpl(firebaseAuth)
     }
 }

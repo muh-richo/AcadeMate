@@ -91,7 +91,7 @@ fun Profil(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Bagus Satrio",
+                    text = "M Richo Abadinata",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -100,6 +100,12 @@ fun Profil(navController: NavController) {
                 Text(
                     text = "Member",
                     fontSize = 16.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Member",
+                    fontSize = 12.sp,
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(36.dp))
