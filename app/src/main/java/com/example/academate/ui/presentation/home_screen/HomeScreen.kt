@@ -1,4 +1,4 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.home_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -123,7 +123,7 @@ fun HomeScreen(navController: NavController){
                     DaftarMataKuliahDiminati(
                         painter = painterResource(id = R.drawable.matakuliah),
                         matakuliah = it.item!!.namaMatkul,
-                        fakultas = it.item!!.desc,
+                        fakultas = it.item!!.fakultas,
                         navController = navController
                     )
                 }
@@ -145,15 +145,7 @@ fun Greet(
     ) {
         Column(
             modifier = Modifier
-                .background(
-                    Color.Transparent
-//                    Brush.horizontalGradient(
-//                        colors = listOf(
-//                            BiruMuda,
-//                            Putih
-//                        )
-//                    )
-                )
+                .background(Color.Transparent)
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
@@ -306,7 +298,7 @@ fun DaftarMataKuliahDiminati(
                 .background(color = Color.Transparent)
                 .padding(start = 20.dp, end = 20.dp, bottom = 5.dp),
             onClick = {
-                navController.navigate(Route.INFORMASIRPL)
+                navController.navigate(Route.INFORMASI_MATKUL)
             }
         ) {
             Box(
@@ -325,7 +317,6 @@ fun DaftarMataKuliahDiminati(
                                 .fillMaxWidth(0.3f)
                         )
                     }
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -337,10 +328,6 @@ fun DaftarMataKuliahDiminati(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color.Black,
-                                modifier = Modifier
-                                    .clickable {
-
-                                    }
                             )
                             Text(
                                 text = fakultas,

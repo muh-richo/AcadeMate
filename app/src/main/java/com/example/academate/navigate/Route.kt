@@ -8,7 +8,7 @@ object Route {
     const val SIGNUP = "signup"
     const val HOME = "home"
     const val MATAKULIAH = "matakuliah"
-    const val INFORMASIRPL = "informasiRPL"
+    const val INFORMASI_MATKUL = "informasiMatkul"
     const val DAFTARMENTORRPL = "daftarmentorRPL"
     const val INFORMASIMENTOR = "informasiMentor"
     const val SEARCH = "search"

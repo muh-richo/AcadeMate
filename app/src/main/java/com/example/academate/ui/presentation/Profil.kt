@@ -66,7 +66,10 @@ fun Profil(navController: NavController) {
                         IconButton(onClick = {
                             navController.popBackStack()
                         }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back"
+                            )
                         }
                     },
                 )
