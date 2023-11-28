@@ -1,96 +1,62 @@
 package com.example.academate
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.academate.ui.presentation.LoginScreen
-import com.example.academate.ui.presentation.ProfilScreen
-import com.example.academate.ui.presentation.SignUpScreen
-import com.example.academate.ui.presentation.Splash1
-import com.example.academate.ui.presentation.Splash2
-import com.example.academate.ui.presentation.Splash3
-import com.example.academate.ui.theme.AcadeMateTheme
-import kotlinx.coroutines.delay
+import com.example.academate.navigate.CustomScaffold
+import com.example.academate.navigate.Navigasi
+import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.DaftarMentor
+import dagger.hilt.android.AndroidEntryPoint
 
+@OptIn(ExperimentalMaterial3Api::class)
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    val showBar = listOf(
+        Route.HOME,
+        Route.MATAKULIAH,
+        Route.SEARCH,
+        Route.PROFILE
+    )
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
-            AcadeMateTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+            val navController = rememberNavController()
+            val backStackEntry by navController.currentBackStackEntryAsState()
+            val currPage = backStackEntry?.destination?.route
+
+            Surface {
+                CustomScaffold(
+                    navController = navController,
+                    showBottomBar = currPage in showBar
                 ) {
-                    val navController = rememberNavController()
-                    MyApp(navController = navController)
+                    Navigasi(navController = navController)
                 }
             }
         }
     }
+
 }
-
-@Composable
-fun MyApp(navController: NavHostController) {
-    var isLoading by remember {
-        mutableStateOf(true)
-    }
-
-    LaunchedEffect(isLoading){
-        delay(3000)
-        isLoading = false
-    }
-
-    if (isLoading){
-        Splash1()
-    }else{
-        NavHost(navController = navController, startDestination = "splash2") {
-            composable("splash2") {
-                Splash2(onNextClick = {
-                    navController.navigate("splash3")
-                })
-            }
-            composable("splash3") {
-                Splash3(onNextClick = {
-                    navController.navigate("login")
-                })
-            }
-            composable("login"){
-                LoginScreen(onNextClick = {
-                    navController.navigate("signUp")
-                })
-            }
-            composable("signUp"){
-                SignUpScreen(onNextClick = {
-                    navController.navigate("profil")
-                })
-            }
-            composable("profil"){
-                ProfilScreen()
-            }
-        }
-    }
-}
-
-//@Preview
-//@Composable
-//fun MyAppPreview() {
-//    AcadeMateTheme {
-//        MyApp(navController = navController)
-//    }
-//}
