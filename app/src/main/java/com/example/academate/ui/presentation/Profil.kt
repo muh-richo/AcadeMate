@@ -102,15 +102,8 @@ fun Profil(navController: NavController) {
                     fontSize = 16.sp,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Member",
-                    fontSize = 12.sp,
-                    color = Color.Black
-                )
                 Spacer(modifier = Modifier.height(36.dp))
                 ProfilMenu(navController)
-
             }
         }
     }

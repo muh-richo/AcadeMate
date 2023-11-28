@@ -1,4 +1,4 @@
-package com.example.academate.data
+package com.example.academate.data.repository
 
 import com.example.academate.data.model.MataKuliahModelResponse
 import com.example.academate.model.MataKuliah
