@@ -137,7 +137,7 @@ fun InformasiMentor(navController: NavController, userViewModel: UserViewModel){
             modifier = Modifier.verticalScroll(scrollState)
         ) {
             DeskripsiMentor(namaLengkap, pengalaman, course)
-            ButtonMentor(namaLengkap, course, userRef)
+            ButtonMentor(namaLengkap, course, userRef, navController)
         }
     }
 }
@@ -294,7 +294,8 @@ fun ButtonMentor(
     namaMentor: String,
     course:String,
     user: DatabaseReference,
-    modifier: Modifier = Modifier
+    navController: NavController
+    modifier: Modifier = Modifier,
 ){
     var showDialog by remember { mutableStateOf(false) }
     Button(
@@ -338,20 +339,20 @@ fun ButtonMentor(
                         onClick = {
                             //generatewaktu
                             val currentDateTime= LocalDateTime.now()
-                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyyHH:mm:ss")
+                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyyHH_mm-ss")
                             val formattedDateTime=currentDateTime.format(formatter)
 
                             var riwayatNode=user.child("riwayat")
-                            var id = UUID.randomUUID().toString()
-                            var riwayatItem=riwayatNode.child("id")
+//                            var id = UUID.randomUUID().toString()
+//                            var riwayatItem=riwayatNode.child(id)
                             var riwayat=Riwayat(namaMentor,course, formattedDateTime.toString())
-                            riwayatItem.setValue(riwayat)
+//                            riwayatItem.setValue(riwayat)
 
                             //updatenilaimember
-                            riwayatNode.setValue(riwayatItem)
-
-
+                            riwayatNode.setValue(riwayat)
                             showDialog = false
+
+
                         },
                         modifier = Modifier
                             .height(35.dp)

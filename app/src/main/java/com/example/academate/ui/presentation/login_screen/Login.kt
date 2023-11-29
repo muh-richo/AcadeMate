@@ -7,8 +7,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
@@ -25,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -46,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -114,18 +119,21 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.logooo),
             contentDescription = "logo",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(270.dp)
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "AcadeMate",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-        Spacer(modifier = Modifier.height(50.dp))
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Text(
+//            text = "AcadeMate",
+//            fontSize = 32.sp,
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White
+//        )
+//        Spacer(modifier = Modifier.height(50.dp))
+
+//        Spacer(modifier = Modifier.height(10.dp))
+
         Card (
             modifier = Modifier
                 .fillMaxWidth()
@@ -184,6 +192,8 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
+//                              navController.navigate(Route.HOME)
+                        // menambahkan login
                         // menjalankan logika login
                         scope.launch {
                             viewModel.loginUser(email, password)
@@ -231,7 +241,7 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
                     )
                 }
 
-//                menambahkan loading setelah submit
+                // menambahkan loading setelah submit
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -78,7 +78,7 @@ fun Navigasi(
             PemberitahuanBeMentor(navController)
         }
         composable(Route.RIWAYAT){
-            Riwayat(navController)
+            Riwayat(navController, userViewModel)
         }
         composable(Route.REVIEWMENTOR){
             ReviewMentor(navController)

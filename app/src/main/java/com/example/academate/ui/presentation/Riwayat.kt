@@ -1,5 +1,7 @@
 package com.example.academate.ui.presentation
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +25,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -32,6 +41,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +50,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.BiruMuda
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
@@ -48,7 +63,46 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 @Composable
-fun Riwayat(navController: NavController){
+fun Riwayat(navController: NavController, viewModel: UserViewModel){
+
+    val username by viewModel.username.collectAsState()
+
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val user = database.getReference("users").child(username)// pointer ke root users
+
+    // inisialisasi variabel riwayat
+    var namaMentor by remember{ mutableStateOf("") }
+    var matkul by remember{ mutableStateOf("") }
+    var waktu by remember{ mutableStateOf("") }
+    var count by remember { mutableIntStateOf(0) }
+
+    user.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if(snapshot.hasChild("riwayat")){
+                count = 1
+                user.child("riwayat").addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+                        val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
+
+                        namaMentor = map?.get("namaMentor").toString()
+                        matkul = map?.get("course").toString()
+                        waktu = map?.get("waktu").toString()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                    }
+                })
+            }
+        }
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+        }
+    })
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -109,7 +163,7 @@ fun Riwayat(navController: NavController){
                 )
             }
             Text(
-                text = "Menampilkan Mentor Rekayasa Perangkat Lunak:",
+                text = "Menampilkan Riwayat:",
                 modifier = Modifier
                     .alpha(0.5f)
                     .padding(top = 25.dp, bottom = 20.dp),
@@ -120,14 +174,15 @@ fun Riwayat(navController: NavController){
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                items(5){currentRiwayat ->
+                items(count){currentRiwayat ->
                     Row (
                         modifier = Modifier
+                            .fillMaxWidth()
                             .background(
                                 color = Color(0xFFEAEAEA),
                                 shape = RoundedCornerShape(corner = CornerSize(10.dp))
                             )
-                            .border(1.dp, Color(0xF222222   ))
+                            .border(1.dp, Color(0xF222222))
                             .padding(horizontal = 7.dp, vertical = 11.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
@@ -137,7 +192,7 @@ fun Riwayat(navController: NavController){
                                 .background(Color.Green)
                         ){
                             Image(
-                                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                                painter = painterResource(id = R.drawable.matakuliah),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -146,9 +201,9 @@ fun Riwayat(navController: NavController){
 
                         Spacer(modifier = Modifier.width(7.dp))
                         Column {
-                            Text(text = "Arif Rama Putra Sa’id", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                            Text(text = matkul, fontSize = 18.sp, fontWeight = FontWeight.Medium)
                             Text(
-                                text = "Jaringan Saraf Tiruan - Fakultas Ilmu Komputer",
+                                text = namaMentor,
                                 fontSize = 12.sp,
                                 lineHeight = 15.sp,
                                 modifier = Modifier.padding(top = 8.dp, bottom = 6.dp)
@@ -156,9 +211,9 @@ fun Riwayat(navController: NavController){
                             Row (
                                 verticalAlignment = Alignment.CenterVertically
                             ){
-                                Image(painter = painterResource(id = R.drawable.heart), contentDescription = null)
+//                                Image(painter = painterResource(id = R.drawable.heart), contentDescription = null)
                                 Spacer(modifier = Modifier.width(5.dp))
-                                Text(text = "4.3 / 5", fontSize = 10.sp)
+                                Text(text = waktu, fontSize = 10.sp)
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -172,18 +227,18 @@ fun Riwayat(navController: NavController){
                                 modifier = Modifier.height(15.dp),
                                 shape = RoundedCornerShape(0.dp)
                             ) {
-                                ClickableText(
-                                    text = AnnotatedString("Rating & Review"),
-                                    style = MaterialTheme.typography.bodySmall.copy(
-                                        fontSize = 12.sp,
-                                        color = BiruMuda
-                                    ),
-                                    onClick = {
-                                        navController.navigate(Route.REVIEWMENTOR)
-                                    }
-
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
+//                                ClickableText(
+//                                    text = AnnotatedString("Rating & Review"),
+//                                    style = MaterialTheme.typography.bodySmall.copy(
+//                                        fontSize = 12.sp,
+//                                        color = BiruMuda
+//                                    ),
+//                                    onClick = {
+//                                        navController.navigate(Route.REVIEWMENTOR)
+//                                    }
+//
+//                                )
+//                                Spacer(modifier = Modifier.width(5.dp))
 
                             }
                         }
