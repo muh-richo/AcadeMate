@@ -3,6 +3,7 @@ package com.example.academate.ui.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,8 +19,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -94,27 +100,27 @@ fun Riwayat(navController: NavController){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp)
+//                .padding(start = 20.dp, end = 20.dp)
         ){
             Row (
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 25.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, top = 6.dp, end = 10.dp, bottom = 6.dp)
             ){
-                Image(painter = painterResource(id = R.drawable.arrowleft), contentDescription = null)
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                }
                 Text(
                     text = "Riwayat",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 14.dp)
+                    fontStyle = FontStyle.Normal
                 )
             }
-            Text(
-                text = "Menampilkan Mentor Rekayasa Perangkat Lunak:",
-                modifier = Modifier
-                    .alpha(0.5f)
-                    .padding(top = 25.dp, bottom = 20.dp),
-                fontSize = 12.sp,
-            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth(),

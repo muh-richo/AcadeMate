@@ -119,7 +119,7 @@ fun DaftarMentor(navController: NavController){
                     )
                 }
                 Text(
-                    text = "Rekayasa Perangkat Lunak",
+                    text = "Daftar Mentor",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
