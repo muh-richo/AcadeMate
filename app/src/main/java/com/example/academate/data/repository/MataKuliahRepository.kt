@@ -17,12 +17,15 @@ class MataKuliahRepository {
         FirebaseDatabase
             .getInstance("https://academate-10006-default-rtdb.firebaseio.com/")
             .reference
+            .child("MataKuliah")
+
+    var currentMatkul: MataKuliahModelResponse? = null
 
     fun getMataKuliah(): Flow<Resource<List<MataKuliahModelResponse>>> =
         callbackFlow {
             trySend(Resource.Loading())
 
-            db.child("MataKuliah").addValueEventListener(object : ValueEventListener{
+            db.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val items = snapshot.children.map {
                         MataKuliahModelResponse(it.getValue(MataKuliah::class.java), it.key)
@@ -32,6 +35,29 @@ class MataKuliahRepository {
 
                 override fun onCancelled(error: DatabaseError) {
                     trySend(Resource.Error("Tidak bisa mengambil data \n${error.message}"))
+                }
+            })
+
+            awaitClose {
+                close()
+            }
+        }
+
+    fun getMatkulById(id: String) =
+        callbackFlow<Resource<MataKuliahModelResponse>> {
+            trySend(Resource.Loading())
+
+            db.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val matkul = snapshot.children.map {
+                        MataKuliahModelResponse(it.getValue(MataKuliah::class.java), it.key)
+                    }.filter { it.key == id }
+                    currentMatkul = matkul[0]
+                    trySend(Resource.Success(matkul[0]))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    trySend(Resource.Error(error.toString()))
                 }
             })
 

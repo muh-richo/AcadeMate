@@ -1,4 +1,4 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.mata_kuliah
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.data.model.MataKuliahModelResponse
+import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
 import com.example.academate.util.Resource
@@ -90,8 +91,9 @@ fun MataKuliah(navController: NavController) {
                     painter = painterResource(
                         id = R.drawable.matakuliah
                     ),
+                    idMatkul = it.item!!.id,
                     matakuliah = it.item!!.namaMatkul,
-                    fakultas = it.item!!.desc,
+                    fakultas = it.item!!.fakultas,
                     navController = navController
                 )
             }
@@ -130,6 +132,7 @@ fun Header(
 @Composable
 fun DaftarMataKuliah(
     painter: Painter,
+    idMatkul: String,
     matakuliah: String,
     fakultas: String,
     modifier: Modifier = Modifier,
@@ -146,7 +149,8 @@ fun DaftarMataKuliah(
                 .background(color = Color.Transparent)
                 .padding(start = 20.dp, end = 20.dp, bottom = 5.dp),
             onClick = {
-                navController.navigate("informasiRPL")
+                navController.navigate(Route.INFORMASI_MATKUL)
+//                navController.navigate(Route.INFORMASI_MATKUL + "?idMatkul=$idMatkul.id}")
             }
         ) {
             Box(

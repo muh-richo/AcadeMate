@@ -12,14 +12,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -93,25 +101,31 @@ fun DaftarMentor(navController: NavController){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp)
+                .padding(start = 8.dp)
         ){
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 25.dp)
+                modifier = Modifier.padding(16.dp)
             ){
-                Image(painter = painterResource(id = R.drawable.arrowleft), contentDescription = null)
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
                 Text(
                     text = "Rekayasa Perangkat Lunak",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 14.dp)
+                    fontWeight = FontWeight.Bold
                 )
             }
             Text(
                 text = "Menampilkan Mentor Rekayasa Perangkat Lunak:",
                 modifier = Modifier
                     .alpha(0.5f)
-                    .padding(top = 25.dp, bottom = 20.dp),
+                    .padding(start = 15.dp, bottom = 20.dp),
                 fontSize = 12.sp,
             )
             MentorListView(riwayat = riwayat, navController = navController)
@@ -119,11 +133,13 @@ fun DaftarMentor(navController: NavController){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MentorListView(riwayat: Array<Int>, navController: NavController){
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(riwayat) { currentRiwayat ->
@@ -137,45 +153,81 @@ fun MentorListView(riwayat: Array<Int>, navController: NavController){
                     .padding(horizontal = 7.dp, vertical = 11.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .background(color = Color.Transparent)
+//                        .padding(start = 20.dp, end = 20.dp, bottom = 5.dp),
+//                    onClick = {
+//                        navController.navigate(Route.INFORMASI_MATKUL)
+//                    }
+//                ) {
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                    ) {
+//                        Row {
+//                            Box(modifier = Modifier
+//                                .height(80.dp)
+//                            ){
+//                                Image(
+//                                    painter = painterResource(id = R.drawable.foto_profil),
+//                                    contentDescription = null,
+//                                    contentScale = ContentScale.Crop,
+//                                    modifier = Modifier.size(70.dp)
+//                                )
+//                            }
+//                            Box(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .padding(start = 15.dp, top = 10.dp)
+//                            ){
+//                                Column {
+//                                    Text(
+//                                        text = "Rekayasa Perangkat Lunak",
+//                                        fontSize = 18.sp,
+//                                        fontWeight = FontWeight.Medium
+//                                    )
+//                                    Text(
+//                                        text = "Arif Rama Putra Said",
+//                                        fontSize = 12.sp,
+//                                        lineHeight = 15.sp,
+//                                        modifier = Modifier.padding(top = 8.dp, bottom = 6.dp)
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+
+
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(Color.Green)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        painter = painterResource(id = R.drawable.foto_profil),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
+                        modifier = Modifier.size(85.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.width(7.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Arif Rama Putra Sa’id",
+                        text = "Rekayasa Perangkat Lunak",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = "Jaringan Saraf Tiruan - Fakultas Ilmu Komputer",
+                        text = "Arif Rama Putra Said",
                         fontSize = 12.sp,
                         lineHeight = 15.sp,
                         modifier = Modifier.padding(top = 8.dp, bottom = 6.dp)
                     )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.heart),
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(5.dp))
-                        Text(text = "4.3 / 5", fontSize = 10.sp)
-                    }
-
                     Spacer(modifier = Modifier.height(8.dp))
-
                     Button(
                         onClick = {
                                   navController.navigate(Route.INFORMASIMENTOR)
@@ -192,12 +244,7 @@ fun MentorListView(riwayat: Array<Int>, navController: NavController){
                             fontSize = 12.sp,
                             color = Color.Black,
                         )
-                        Spacer(modifier = Modifier.width(5.dp))
-
-                        Image(
-                            painter = painterResource(id = R.drawable.arrowleft),
-                            contentDescription = null,
-                        )
+                        Icons.Default.KeyboardArrowRight
                     }
                 }
             }
