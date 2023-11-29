@@ -22,11 +22,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
@@ -39,9 +41,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,9 +62,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.data.model.MataKuliahModelResponse
+import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.model.ListMentor
 import com.example.academate.model.dummyListMentor
 import com.example.academate.ui.theme.AcadeMateTheme
+import com.example.academate.util.Resource
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,9 +95,27 @@ fun SearchScreen(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Search(navController: NavController) {
-    var searchText by remember {
-        mutableStateOf("")
-    }
+    var searchText by remember { mutableStateOf("") }
+
+
+//    val mataKuliahRepository = MataKuliahRepository()
+//    val scope = rememberCoroutineScope()
+//    var matkul by remember { mutableStateOf<Set<MataKuliahModelResponse>>(emptySet()) }
+//
+//    var matkulFilter = ArrayList<String>()
+//
+//    LaunchedEffect(key1 = true, block = {
+//        scope.launch {
+//            mataKuliahRepository.getMataKuliah().collect {
+//                when (it) {
+//                    is Resource.Error -> {}
+//                    is Resource.Loading -> {}
+//                    is Resource.Success -> matkul = it.data!!.toSet()
+//                }
+//            }
+//        }
+//    })
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,8 +135,7 @@ fun Search(navController: NavController) {
             )
         }
         OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             value = searchText,
             onValueChange = { searchText = it },
             leadingIcon = {
@@ -120,9 +146,41 @@ fun Search(navController: NavController) {
                 )
             },
             placeholder = { Text(text = "Search Here")},
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(10.dp),
+
         )
+//        IconButton(onClick = {
+//            for (item in matkul) {
+//                if(item.item!!.namaMatkul == searchText){
+//                    matkulFilter.add(item.item!!.namaMatkul)
+//                }
+//            }
+//        }) {
+//            Icon(imageVector = Icons.Default.Search, contentDescription = "")
+//        }
+
+
     }
+    // logic filter search
+//    Button(onClick = {
+//        for (item in matkul) {
+//            if(item.item!!.namaMatkul == searchText){
+//                matkulFilter.add(item.item!!.namaMatkul)
+//            }else{
+//
+//            }
+//        }
+//    }) {
+//        Text(text = "Cari")
+//    }
+//
+//    LazyColumn{
+//        items(matkul.toList()){
+//            for(item in matkul){
+//                Text(text = item.item!!.namaMatkul)
+//            }
+//        }
+//    }
 }
 
 @Composable
@@ -194,7 +252,9 @@ fun ShowMentor(listMentor: ListMentor) {
 @Composable
 fun ShowNullMentor() {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(36.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(36.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(

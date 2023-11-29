@@ -61,16 +61,22 @@ import com.example.academate.ui.theme.matkul2
 import com.example.academate.ui.theme.matkul3
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 @Composable
 fun InformasiMentor(navController: NavController, userViewModel: UserViewModel){
 
-    val username by userViewModel.mentorname.collectAsState()
+    val mentorName by userViewModel.mentorname.collectAsState()
+    val userName by userViewModel.username.collectAsState()
 
     // inisialisasi database
     val database = FirebaseDatabase.getInstance()
+    val userRef = database.getReference("users").child(userName)
     val mentorRef = database.getReference("mentors")
 
     // inisialisasi nama, pengalaman, mata kuliah
@@ -89,7 +95,7 @@ fun InformasiMentor(navController: NavController, userViewModel: UserViewModel){
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val map: Map<String, Any>? = snapshot.getValue() as? Map<String, Any>
 
-                        if(map?.get("nama_lengkap").toString() == username){
+                        if(map?.get("nama_lengkap").toString() == mentorName){
                             namaLengkap = map?.get("nama_lengkap").toString()
                             pengalaman = map?.get("experience").toString()
                             course = map?.get("course").toString()
@@ -131,7 +137,7 @@ fun InformasiMentor(navController: NavController, userViewModel: UserViewModel){
             modifier = Modifier.verticalScroll(scrollState)
         ) {
             DeskripsiMentor(namaLengkap, pengalaman, course)
-            ButtonMentor()
+            ButtonMentor(namaLengkap, course, userRef)
         }
     }
 }
@@ -285,6 +291,9 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
 
 @Composable
 fun ButtonMentor(
+    namaMentor: String,
+    course:String,
+    user: DatabaseReference,
     modifier: Modifier = Modifier
 ){
     var showDialog by remember { mutableStateOf(false) }
@@ -327,6 +336,21 @@ fun ButtonMentor(
                 confirmButton = {
                     Button(
                         onClick = {
+                            //generatewaktu
+                            val currentDateTime= LocalDateTime.now()
+                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyyHH:mm:ss")
+                            val formattedDateTime=currentDateTime.format(formatter)
+
+                            var riwayatNode=user.child("riwayat")
+                            var id = UUID.randomUUID().toString()
+                            var riwayatItem=riwayatNode.child("id")
+                            var riwayat=Riwayat(namaMentor,course, formattedDateTime.toString())
+                            riwayatItem.setValue(riwayat)
+
+                            //updatenilaimember
+                            riwayatNode.setValue(riwayatItem)
+
+
                             showDialog = false
                         },
                         modifier = Modifier
@@ -359,5 +383,7 @@ fun ButtonMentor(
             )
         }
     }
-
 }
+
+//untukmenyimpandatariwayat
+data class Riwayat(var namaMentor:String,var course:String, var waktu: String)
