@@ -43,6 +43,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -234,16 +235,18 @@ fun ListMentorTerbaik(
                         Color.Transparent
                     )
             ) {
+                roundImage(painter)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Top,
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(horizontal = 8.dp)
                 ) {
-                    roundImage(painter)
                     Text(
                         text = nama,
                         fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .padding(bottom = 3.dp)
@@ -251,6 +254,7 @@ fun ListMentorTerbaik(
                     Text(
                         text = matakuliah.toString(),
                         fontSize = 10.sp,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
                             .padding(bottom = 6.dp)
                     )

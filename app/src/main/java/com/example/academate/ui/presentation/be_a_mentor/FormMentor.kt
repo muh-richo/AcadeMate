@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
@@ -166,6 +167,7 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
                             modifier = Modifier
                                 .background(Color.Transparent)
                                 .fillMaxWidth()
+                                .heightIn(min = 40.dp, max = 60.dp)
                                 .padding(top = 8.dp),
                             placeholder = { Text(
                                 text = "Nama Lengkap", fontSize = 12.sp) },
@@ -190,6 +192,7 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
                             modifier = Modifier
                                 .background(Color.Transparent)
                                 .fillMaxWidth()
+                                .heightIn(min = 40.dp, max = 60.dp)
                                 .padding(top = 8.dp),
                             placeholder = { Text(
                                 text = "Mata Kuliah", fontSize = 12.sp) },
@@ -215,6 +218,7 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
                             modifier = Modifier
                                 .background(Color.Transparent)
                                 .fillMaxWidth()
+                                .heightIn(min = 40.dp, max = 60.dp)
                                 .padding(top = 8.dp),
                             placeholder = { Text(
                                 text = "Deskripsi singkat pengalaman yang relevan", fontSize = 12.sp) },
@@ -240,6 +244,7 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
                             modifier = Modifier
                                 .background(Color.Transparent)
                                 .fillMaxWidth()
+                                .heightIn(min = 40.dp, max = 60.dp)
                                 .padding(top = 8.dp),
                             placeholder = { Text(
                                 text = "Alasan tertarik menjadi mentor", fontSize = 12.sp)

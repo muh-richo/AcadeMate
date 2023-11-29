@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.navigate.Route
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
@@ -94,10 +95,10 @@ fun PemberitahuanBeMentor(navController: NavController){
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, top = 6.dp, end = 10.dp, bottom = 6.dp)
+                    .padding(top = 6.dp, end = 10.dp, bottom = 6.dp)
             ) {
                 IconButton(onClick = {
-                    navController.popBackStack()
+                    navController.navigate(Route.HOME)
                 }) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
