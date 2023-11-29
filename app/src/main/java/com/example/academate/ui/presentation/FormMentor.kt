@@ -300,8 +300,9 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
                             var mentor = Mentor(name, course, experience)
                             userRef.setValue(mentor)
 
-                            viewModelUser.addToNameList(name)
-                            viewModelUser.addToCourseList(course)
+//                            viewModelUser.addToNameList(name)
+//                            viewModelUser.addToCourseList(course)
+                            viewModelUser.addMentorDetail(name, course)
 
                             navController.navigate(Route.PEMBERITAHUANBEMENTOR)
                         },

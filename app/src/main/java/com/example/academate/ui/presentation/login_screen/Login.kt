@@ -95,8 +95,9 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
                         var course = map?.get("course").toString()
 
                         // set data
-                        viewModelUser.addToNameList(name)
-                        viewModelUser.addToCourseList(course)
+//                        viewModelUser.addToNameList(name)
+//                        viewModelUser.addToCourseList(course)
+                        viewModelUser.addMentorDetail(name, course)
                     }
 
                     override fun onCancelled(error: DatabaseError) {

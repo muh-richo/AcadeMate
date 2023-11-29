@@ -11,12 +11,15 @@ class UserViewModel : ViewModel() {
 
     private val _mentorname = MutableStateFlow("")
     val mentorname: StateFlow<String> = _mentorname.asStateFlow()
+//
+//    private val _nameList = MutableStateFlow<List<String>>(emptyList())
+//    val nameList: StateFlow<List<String>> = _nameList.asStateFlow()
+//
+//    private val _courseList = MutableStateFlow<List<String>>(emptyList())
+//    val courseList: StateFlow<List<String>> = _courseList.asStateFlow()
 
-    private val _nameList = MutableStateFlow<Set<String>>(emptySet())
-    val nameList: StateFlow<Set<String>> = _nameList.asStateFlow()
-
-    private val _courseList = MutableStateFlow<Set<String>>(emptySet())
-    val courseList: StateFlow<Set<String>> = _courseList.asStateFlow()
+    private val _mentorDetails = MutableStateFlow<Map<String, Any>>(emptyMap())
+    val mentorDetails: StateFlow<Map<String, Any>> = _mentorDetails.asStateFlow()
 
     fun setUsername(value: String) {
         _username.value = value
@@ -26,15 +29,21 @@ class UserViewModel : ViewModel() {
         _mentorname.value = value
     }
 
-    fun addToNameList(item: String) {
-        val currentList = _nameList.value.toMutableSet()
-        currentList.add(item)
-        _nameList.value = currentList
-    }
+//    fun addToNameList(item: String) {
+//        val currentList = _nameList.value.toMutableList()
+//        currentList.add(item)
+//        _nameList.value = currentList
+//    }
+//
+//    fun addToCourseList(item: String) {
+//        val currentList = _courseList.value.toMutableList()
+//        currentList.add(item)
+//        _courseList.value = currentList
+//    }
 
-    fun addToCourseList(item: String) {
-        val currentList = _courseList.value.toMutableSet()
-        currentList.add(item)
-        _courseList.value = currentList
+    fun addMentorDetail(key: String, value: Any) {
+        val currentDetails = _mentorDetails.value.toMutableMap()
+        currentDetails[key] = value
+        _mentorDetails.value = currentDetails
     }
 }

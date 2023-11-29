@@ -1,12 +1,8 @@
 package com.example.academate.ui.presentation.home_screen
 
-import android.content.ContentValues
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,16 +26,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,12 +38,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,10 +53,6 @@ import com.example.academate.ui.presentation.login_screen.SignInViewModel
 import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.example.academate.util.Resource
 import kotlinx.coroutines.launch
 
@@ -76,11 +60,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
 
-    val name by viewModelUser.nameList.collectAsState()
-    val course by viewModelUser.courseList.collectAsState()
+//    val name by viewModelUser.nameList.collectAsState()
+//    val course by viewModelUser.courseList.collectAsState()
+    val mentorDetails by viewModelUser.mentorDetails.collectAsState()
+    val keysList: List<String> = mentorDetails.keys.toList()
 
-    val nameList = name.toList()
-    val courseList = course.toList()
+//    val nameList = name.toList()
+//    val courseList = course.toList()
 
     // inisialisasi untuk username yang sudah di dapatkan di login
     val username by viewModelUser.username.collectAsState()
@@ -114,29 +100,32 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                colors = listOf(
-                    Biru,
-                    Putih
-                )
+                    colors = listOf(
+                        Biru,
+                        Putih
+                    )
                 )
             )
     ){
         val scrollState = rememberScrollState()
 
         Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
             Greet(username, navController)
             MentorTerbaik()
 
             val scrollState = rememberScrollState()
+//            Text(text = "ukuran namelist = ${mentorDetails.size}")
             LazyRow(
-                modifier = Modifier
+//                modifier = Modifier
 //                    .horizontalScroll(scrollState)
             ) {
-                items(nameList.size){currentIndex ->
-                    ListMentorTerbaik(painter = painterResource(id = R.drawable.foto_profil),
-                        nama = nameList[currentIndex],
-                        matakuliah = courseList[currentIndex],
+                items(mentorDetails.size){currentIndex ->
+                    ListMentorTerbaik(
+                        painter = painterResource(id = R.drawable.foto_profil),
+                        nama = keysList[currentIndex],
+                        matakuliah = mentorDetails.get(keysList.get(currentIndex)),
                         navController = navController,
                         viewModelUser
                     )
@@ -218,7 +207,7 @@ fun MentorTerbaik(){
 fun ListMentorTerbaik(
     painter: Painter,
     nama: String,
-    matakuliah: String,
+    matakuliah: Any?,
     navController: NavController,
     viewModelUser: UserViewModel
 ){
@@ -259,7 +248,7 @@ fun ListMentorTerbaik(
                             .padding(bottom = 3.dp)
                     )
                     Text(
-                        text = matakuliah,
+                        text = matakuliah.toString(),
                         fontSize = 10.sp,
                         modifier = Modifier
                             .padding(bottom = 6.dp)

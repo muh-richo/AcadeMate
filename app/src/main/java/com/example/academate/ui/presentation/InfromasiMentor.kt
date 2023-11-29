@@ -303,20 +303,23 @@ fun ButtonMentor(
                         onClick = {
                             //generatewaktu
                             val currentDateTime= LocalDateTime.now()
-                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyyHH_mm-ss")
+                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyy:HH-mm-ss")
                             val formattedDateTime=currentDateTime.format(formatter)
 
                             var riwayatNode=user.child("riwayat")
-//                            var id = UUID.randomUUID().toString()
-//                            var riwayatItem=riwayatNode.child(id)
                             var riwayat=Riwayat(namaMentor,course, formattedDateTime.toString())
+                            var id = UUID.randomUUID().toString()
+
+//                            var riwayatItem = riwayatNode.child(id).setValue(riwayat)
+                            riwayatNode.child(id).setValue(riwayat)
+
 //                            riwayatItem.setValue(riwayat)
 
                             //updatenilaimember
-                            riwayatNode.setValue(riwayat)
+//                            riwayatNode.setValue(riwayat)
                             showDialog = false
 
-
+                            navController.navigate(Route.HOME)
                         },
                         modifier = Modifier
                             .height(35.dp)
