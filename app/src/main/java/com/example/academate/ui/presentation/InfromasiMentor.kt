@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -153,7 +154,9 @@ fun HeaderMentor(
             .fillMaxWidth()
     ) {
         IconButton(
-            onClick = { navController.navigate(Route.HOME) },
+            onClick = {
+                navController.popBackStack()
+                      },
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack, contentDescription = "Back"
@@ -177,20 +180,20 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.foto_mentor),
-                contentDescription = "RPL",
+                painter = painterResource(id = R.drawable.foto_profil),
+                contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
+                    .fillMaxHeight(0.3f)
                     .shadow(8.dp)
             )
         }
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-//                .background(color = Color.White)
+                .padding(8.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -207,28 +210,13 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold
                     )
-                    Text(
-                        text = "40.000 IDR / per section",
-                        fontSize = 12.sp,
-                        modifier = Modifier
-                            .padding(start = 170.dp))
                 }
-                Row(
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.heart),
-                        contentDescription = "heart",
-                        modifier = Modifier
-                            .size(18.dp)
-                            .padding(end = 5.dp, top = 2.dp)
-                    )
-                    Text(text = "4.2/5")
-                }
+
                 Text(
-                    text = "About",
-                    fontSize = 16.sp
+                    text = "Pengalaman",
+                    fontSize = 16.sp ,
+                    fontWeight = FontWeight.Bold
+
                 )
                 Text(
                     text = pengalaman,
@@ -250,44 +238,20 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
                         .padding(bottom = 10.dp)
                 )
 
-                Text(
-                    text = "Review",
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                )
-                Text(
-                    text = "Rendy Bayu",
-                    fontSize = 9.sp
-                )
 
-                Row(
-                    modifier = Modifier
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.heart),
-                        contentDescription = "heart",
-                        modifier = Modifier
-                            .size(18.dp)
-                            .padding(end = 5.dp)
-                    )
-                    Text(
-                        text = "4.5/5",
-                        fontSize = 8.sp,
-                        modifier = Modifier
-                            .padding(top = 3.dp)
-                    )
-                }
-
-                Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
-                            "tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas ",
-                    fontSize = 8.sp
-                )
             }
+//                Row(
+//                    verticalAlignment= Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    modifier = Modifier
+//                        .padding(top = 5.dp, bottom = 5.dp)
+//                ) {
+
+            }
+
         }
     }
-}
+
 
 @Composable
 fun ButtonMentor(
@@ -384,6 +348,7 @@ fun ButtonMentor(
             )
         }
     }
+
 }
 
 //untukmenyimpandatariwayat
