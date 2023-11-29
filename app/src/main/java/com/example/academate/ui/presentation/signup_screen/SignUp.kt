@@ -80,19 +80,18 @@ fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewMo
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logooo),
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "logo",
-            modifier = Modifier.size(250.dp)
+            modifier = Modifier.size(100.dp)
         )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        Text(
-//            text = "AcadeMate",
-//            fontSize = 32.sp,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.White
-//        )
-//        Spacer(modifier = Modifier.height(50.dp))
-//        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "AcadeMate",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(50.dp))
         Card (
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,7 +101,7 @@ fun SignUp(navController: NavController, viewModel: SignUpViewModel = hiltViewMo
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 36.dp),
+                    .padding(horizontal = 24.dp, vertical = 25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

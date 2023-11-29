@@ -75,17 +75,17 @@ fun SplashScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
         ){
             Image(
-                painter = painterResource(id = R.drawable.logoo),
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
-                modifier = Modifier.size(350.dp)
+                modifier = Modifier.size(130.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-//            Text(
-//                text = "AcadeMate",
-//                fontSize = 32.sp,
-//                fontWeight = FontWeight.Bold ,
-//                color = colorResource(id = R.color.white)
-//            )
+            Text(
+                text = "AcadeMate",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold ,
+                color = colorResource(id = R.color.white)
+            )
         }
     }
 }

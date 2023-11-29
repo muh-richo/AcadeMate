@@ -85,27 +85,6 @@ fun Riwayat(navController: NavController, viewModel: UserViewModel){
     var waktu = remember { mutableStateListOf<String>() }
     var count by remember { mutableIntStateOf(0) }
 
-//    val idRiwayatState = remember { mutableStateOf("") }
-//
-//    val valueEventListener = object : ValueEventListener {
-//        override fun onDataChange(dataSnapshot: DataSnapshot) {
-//            val idRiwayatList = mutableListOf<String>()
-//            dataSnapshot.children.forEach { idRiwayat ->
-//                idRiwayatList.add(idRiwayat.key ?: "")
-//            }
-//            idRiwayatState.value = idRiwayatList.joinToString("\n")
-//        }
-//
-//        override fun onCancelled(databaseError: DatabaseError) {
-//            // Handle error if any
-//        }
-//    }
-////
-//    user.child("riwayat").addListenerForSingleValueEvent(valueEventListener)
-//
-//    Text(text = idRiwayatState.value)
-//    Log.w("makanan", idRiwayatState.value)
-
     user.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             if(snapshot.hasChild("riwayat")){

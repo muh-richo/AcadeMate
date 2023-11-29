@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -56,17 +58,11 @@ import com.example.academate.ui.theme.Putih
 import com.example.academate.util.Resource
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
 
-//    val name by viewModelUser.nameList.collectAsState()
-//    val course by viewModelUser.courseList.collectAsState()
     val mentorDetails by viewModelUser.mentorDetails.collectAsState()
     val keysList: List<String> = mentorDetails.keys.toList()
-
-//    val nameList = name.toList()
-//    val courseList = course.toList()
 
     // inisialisasi untuk username yang sudah di dapatkan di login
     val username by viewModelUser.username.collectAsState()
@@ -78,8 +74,6 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
     var matkul by remember {
         mutableStateOf<List<MataKuliahModelResponse>>(emptyList())
     }
-
-
 
     LaunchedEffect(key1 = true, block = {
         scope.launch {
@@ -93,58 +87,65 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
         }
     })
 
-    Column(
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
-            .fillMaxSize()
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Biru,
-                        Putih
+                        colorResource(id = R.color.blue2),
+                        colorResource(id = R.color.white)
                     )
                 )
             )
+            .padding(bottom = 80.dp)
     ){
-        val scrollState = rememberScrollState()
-
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Greet(username, navController)
-            MentorTerbaik()
-
-            val scrollState = rememberScrollState()
-//            Text(text = "ukuran namelist = ${mentorDetails.size}")
-            LazyRow(
-//                modifier = Modifier
-//                    .horizontalScroll(scrollState)
+        items(1){
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                items(mentorDetails.size){currentIndex ->
-                    ListMentorTerbaik(
-                        painter = painterResource(id = R.drawable.foto_profil),
-                        nama = keysList[currentIndex],
-                        matakuliah = mentorDetails.get(keysList.get(currentIndex)),
-                        navController = navController,
-                        viewModelUser
-                    )
+                Greet(username, navController)
+                MentorTerbaik()
+
+                LazyRow() {
+                    items(mentorDetails.size){currentIndex ->
+                        ListMentorTerbaik(
+                            painter = painterResource(id = R.drawable.foto_profil),
+                            nama = keysList[currentIndex],
+                            matakuliah = mentorDetails.get(keysList.get(currentIndex)),
+                            navController = navController,
+                            viewModelUser
+                        )
+                    }
                 }
-            }
+                matakuliahDiminati()
 
-            matakuliahDiminati()
-
-            LazyColumn(){
-                items(matkul){
-                    DaftarMataKuliahDiminati(
-                        painter = painterResource(id = R.drawable.matakuliah),
-                        matakuliah = it.item!!.namaMatkul,
-                        fakultas = it.item!!.fakultas,
-                        navController = navController
-                    )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    for (matkulItem in matkul) {
+                        DaftarMataKuliahDiminati(
+                            painter = painterResource(id = R.drawable.matakuliah),
+                            matakuliah = matkulItem.item?.namaMatkul ?: "",
+                            fakultas = matkulItem.item?.fakultas ?: "",
+                            navController = navController
+                        )
+                    }
                 }
-            }
+//                LazyColumn(){
+//                    items(matkul){
+//                        DaftarMataKuliahDiminati(
+//                            painter = painterResource(id = R.drawable.matakuliah),
+//                            matakuliah = it.item!!.namaMatkul,
+//                            fakultas = it.item!!.fakultas,
+//                            navController = navController
+//                        )
+//                    }
+//                }
 
+            }
         }
     }
 }

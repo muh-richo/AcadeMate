@@ -41,7 +41,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -99,8 +98,7 @@ fun SearchScreen(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Search(navController: NavController) {
-    var searchText by remember { mutableStateOf("makanan") }
-
+    var searchText by remember { mutableStateOf("") }
 
     // pmatakuliah
     val mataKuliahRepository = MataKuliahRepository()
@@ -108,8 +106,8 @@ fun Search(navController: NavController) {
     var matkul by remember {
         mutableStateOf<List<MataKuliahModelResponse>>(emptyList())
     }
+    val shouldShowLazyColumn = remember { mutableStateOf(false) }
 
-    var context = LocalContext.current
 
     LaunchedEffect(key1 = true, block = {
         scope.launch {
@@ -123,19 +121,6 @@ fun Search(navController: NavController) {
         }
     })
 
-//    LazyColumn(){
-//        items(matkul){
-//            if(it.item!!.namaMatkul == searchText){
-//                DaftarMataKuliahDiminati(
-//                    painter = painterResource(id = R.drawable.matakuliah),
-//                    matakuliah = it.item!!.namaMatkul,
-//                    fakultas = it.item!!.fakultas,
-//                    navController = navController
-//                )
-//            }
-//        }
-//    }
-    val shouldShowLazyColumn = remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -162,20 +147,6 @@ fun Search(navController: NavController) {
 //                .fillMaxWidth(),
             value = searchText,
             onValueChange = { searchText = it },
-
-//            leadingIcon = {
-//                IconButton(
-//                    onClick = {
-//                        navController.popBackStack()
-//                    }
-//                ){
-//                    Icon(
-//                        imageVector = Icons.Outlined.Search,
-//                        contentDescription = null,
-//                        modifier = Modifier.size(32.dp)
-//                    )
-//                }
-//            },
             placeholder = { Text(text = "Search Here")},
             shape = RoundedCornerShape(10.dp),
         )
@@ -193,19 +164,8 @@ fun Search(navController: NavController) {
                 modifier = Modifier.size(32.dp)
             )
         }
-//        IconButton(onClick = {
-//            for (item in matkul) {
-//                if(item.item!!.namaMatkul == searchText){
-//                    matkulFilter.add(item.item!!.namaMatkul)
-//                }
-//            }
-//        }) {
-//            Icon(imageVector = Icons.Default.Search, contentDescription = "")
-//        }
-
-
     }
-
+    // logic search
     if(shouldShowLazyColumn.value){
         Spacer(modifier = Modifier.height(5.dp))
         LazyColumn(){
@@ -221,26 +181,6 @@ fun Search(navController: NavController) {
             }
         }
     }
-    // logic filter search
-//    Button(onClick = {
-//        for (item in matkul) {
-//            if(item.item!!.namaMatkul == searchText){
-//                matkulFilter.add(item.item!!.namaMatkul)
-//            }else{
-//
-//            }
-//        }
-//    }) {
-//        Text(text = "Cari")
-//    }
-//
-//    LazyColumn{
-//        items(matkul.toList()){
-//            for(item in matkul){
-//                Text(text = item.item!!.namaMatkul)
-//            }
-//        }
-//    }
 }
 
 @Composable

@@ -94,9 +94,6 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
                         var name = map?.get("nama_lengkap").toString()
                         var course = map?.get("course").toString()
 
-                        // set data
-//                        viewModelUser.addToNameList(name)
-//                        viewModelUser.addToCourseList(course)
                         viewModelUser.addMentorDetail(name, course)
                     }
 
@@ -120,20 +117,18 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logooo),
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "logo",
-            modifier = Modifier.size(270.dp)
+            modifier = Modifier.size(100.dp)
         )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        Text(
-//            text = "AcadeMate",
-//            fontSize = 32.sp,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.White
-//        )
-//        Spacer(modifier = Modifier.height(50.dp))
-
-//        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "AcadeMate",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(50.dp))
 
         Card (
             modifier = Modifier
@@ -144,7 +139,7 @@ fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 36.dp),
+                    .padding(horizontal = 24.dp, vertical = 25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

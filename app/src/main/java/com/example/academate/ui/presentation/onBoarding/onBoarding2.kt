@@ -41,19 +41,18 @@ fun onBoarding2(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.blue1))
-            .padding(start = 16.dp, end = 10.dp, bottom = 42.dp),
+            .padding(start = 16.dp, end = 10.dp, bottom = 45.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ){
         Image(
-            painter = painterResource(id = R.drawable.logoo),
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "logo",
             modifier = Modifier
                 .padding(top = 140.dp)
-                .size(370.dp)
+                .size(175.dp)
         )
-        Spacer(modifier = Modifier.height(80.dp))
-//        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(150.dp))
         Text(
             text = "Perlihatkan Potensi Anda",
             fontSize = 24.sp,
