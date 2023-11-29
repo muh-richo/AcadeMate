@@ -79,11 +79,8 @@ fun Profil(navController: NavController, viewModelUser: UserViewModel) {
     // mengambil status apakah mentor atau bukan
     mentorRef.addValueEventListener(object: ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
-            val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
-
-            var mentor = map?.get("mentor").toString()
-            if ( mentor == "true") {
+            val map: Map<String, Any>? = snapshot.getValue() as? Map<String, Any>
+            if ( map?.get("mentor").toString() == "true") {
                 // mendapatkan username current user
                 status = "Mentor"
                 Log.w("mentor", status)

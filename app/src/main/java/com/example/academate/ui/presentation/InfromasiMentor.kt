@@ -1,5 +1,7 @@
 package com.example.academate.ui.presentation
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
@@ -49,15 +52,63 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.BiruMuda
 import com.example.academate.ui.theme.Putih
 import com.example.academate.ui.theme.matkul
 import com.example.academate.ui.theme.matkul2
 import com.example.academate.ui.theme.matkul3
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @Composable
-fun InformasiMentor(navController: NavController){
+fun InformasiMentor(navController: NavController, userViewModel: UserViewModel){
+
+    val username by userViewModel.mentorname.collectAsState()
+
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val mentorRef = database.getReference("mentors")
+
+    // inisialisasi nama, pengalaman, mata kuliah
+    var namaLengkap by remember { mutableStateOf("") }
+    var pengalaman by remember { mutableStateOf("") }
+    var course by remember { mutableStateOf("") }
+
+
+
+    mentorRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+//            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+            (snapshot.getValue() as? Map<String, Any>)?.forEach { (key, value) ->
+//                val currentUserCheck = mentorRef.child(key)
+                mentorRef.child(key).addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val map: Map<String, Any>? = snapshot.getValue() as? Map<String, Any>
+
+                        if(map?.get("nama_lengkap").toString() == username){
+                            namaLengkap = map?.get("nama_lengkap").toString()
+                            pengalaman = map?.get("experience").toString()
+                            course = map?.get("course").toString()
+                        }
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                    }
+                })
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+        }
+    })
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
@@ -79,7 +130,7 @@ fun InformasiMentor(navController: NavController){
         Column(
             modifier = Modifier.verticalScroll(scrollState)
         ) {
-            DeskripsiMentor()
+            DeskripsiMentor(namaLengkap, pengalaman, course)
             ButtonMentor()
         }
     }
@@ -112,7 +163,7 @@ fun HeaderMentor(
 }
 
 @Composable
-fun DeskripsiMentor(){
+fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String){
     Column {
         Box(
             modifier = Modifier
@@ -146,7 +197,7 @@ fun DeskripsiMentor(){
                         .padding(top = 5.dp, bottom = 5.dp)
                 ) {
                     Text(
-                        text = "Aziz Purnomo",
+                        text = namaLengkap,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -174,24 +225,20 @@ fun DeskripsiMentor(){
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
-                            "tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas " +
-                            "maecenas pharetra convallis. Aenean euismod elementum nisi quis eleifend quam " +
-                            "adipiscing. Nisi est sit amet facilisis magna etiam tempor. Augue lacus viverra " +
-                            "vitae congue eu.",
+                    text = pengalaman,
                     fontSize = 12.sp,
                     modifier = Modifier
                         .padding(bottom = 10.dp)
                 )
 
                 Text(
-                    text = "Tempat",
+                    text = "Mata Kuliah",
                     fontSize = 16.sp,
                     modifier = Modifier
                         .padding(bottom = 5.dp)
                 )
                 Text(
-                    text = "Gedung Kreativitas Mahasiswa Lt. 1",
+                    text = matakuliah,
                     fontSize = 11.sp,
                     modifier = Modifier
                         .padding(bottom = 10.dp)

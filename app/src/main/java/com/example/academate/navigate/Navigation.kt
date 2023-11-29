@@ -63,7 +63,7 @@ fun Navigasi(
             DaftarMentor(navController)
         }
         composable(Route.INFORMASIMENTOR) {
-            InformasiMentor(navController)
+            InformasiMentor(navController, userViewModel)
         }
         composable(Route.SEARCH) {
             SearchScreen(navController)

@@ -137,7 +137,8 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
                     ListMentorTerbaik(painter = painterResource(id = R.drawable.foto_profil),
                         nama = nameList[currentIndex],
                         matakuliah = courseList[currentIndex],
-                        navController = navController
+                        navController = navController,
+                        viewModelUser
                     )
                 }
             }
@@ -218,7 +219,8 @@ fun ListMentorTerbaik(
     painter: Painter,
     nama: String,
     matakuliah: String,
-    navController: NavController
+    navController: NavController,
+    viewModelUser: UserViewModel
 ){
     Column(
         modifier = Modifier
@@ -231,6 +233,7 @@ fun ListMentorTerbaik(
                 .height(210.dp),
             onClick = {
                 navController.navigate(Route.INFORMASIMENTOR)
+                viewModelUser.setMentorname(nama)
             }
         ) {
             Column(
