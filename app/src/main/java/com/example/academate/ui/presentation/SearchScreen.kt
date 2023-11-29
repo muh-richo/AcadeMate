@@ -1,5 +1,7 @@
 package com.example.academate.component
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,6 +39,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -52,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,6 +70,7 @@ import com.example.academate.data.model.MataKuliahModelResponse
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.model.ListMentor
 import com.example.academate.model.dummyListMentor
+import com.example.academate.ui.presentation.home_screen.DaftarMataKuliahDiminati
 import com.example.academate.ui.theme.AcadeMateTheme
 import com.example.academate.util.Resource
 import kotlinx.coroutines.flow.collect
@@ -74,15 +79,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            Search(navController)
-        }
-    ) { paddingValues ->
+    Column(
+    ) {
+//            paddingValues ->
+        Search(navController)
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues),
+                .fillMaxWidth(),
+//                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
@@ -95,26 +99,43 @@ fun SearchScreen(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Search(navController: NavController) {
-    var searchText by remember { mutableStateOf("") }
+    var searchText by remember { mutableStateOf("makanan") }
 
 
-//    val mataKuliahRepository = MataKuliahRepository()
-//    val scope = rememberCoroutineScope()
-//    var matkul by remember { mutableStateOf<Set<MataKuliahModelResponse>>(emptySet()) }
-//
-//    var matkulFilter = ArrayList<String>()
-//
-//    LaunchedEffect(key1 = true, block = {
-//        scope.launch {
-//            mataKuliahRepository.getMataKuliah().collect {
-//                when (it) {
-//                    is Resource.Error -> {}
-//                    is Resource.Loading -> {}
-//                    is Resource.Success -> matkul = it.data!!.toSet()
-//                }
+    // pmatakuliah
+    val mataKuliahRepository = MataKuliahRepository()
+    val scope = rememberCoroutineScope()
+    var matkul by remember {
+        mutableStateOf<List<MataKuliahModelResponse>>(emptyList())
+    }
+
+    var context = LocalContext.current
+
+    LaunchedEffect(key1 = true, block = {
+        scope.launch {
+            mataKuliahRepository.getMataKuliah().collect {
+                when (it) {
+                    is Resource.Error -> {}
+                    is Resource.Loading -> {}
+                    is Resource.Success -> matkul = it.data!!
+                }
+            }
+        }
+    })
+
+//    LazyColumn(){
+//        items(matkul){
+//            if(it.item!!.namaMatkul == searchText){
+//                DaftarMataKuliahDiminati(
+//                    painter = painterResource(id = R.drawable.matakuliah),
+//                    matakuliah = it.item!!.namaMatkul,
+//                    fakultas = it.item!!.fakultas,
+//                    navController = navController
+//                )
 //            }
 //        }
-//    })
+//    }
+    val shouldShowLazyColumn = remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -135,20 +156,43 @@ fun Search(navController: NavController) {
             )
         }
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .width(200.dp)
+                .height(50.dp),
+//                .fillMaxWidth(),
             value = searchText,
             onValueChange = { searchText = it },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
-            },
+
+//            leadingIcon = {
+//                IconButton(
+//                    onClick = {
+//                        navController.popBackStack()
+//                    }
+//                ){
+//                    Icon(
+//                        imageVector = Icons.Outlined.Search,
+//                        contentDescription = null,
+//                        modifier = Modifier.size(32.dp)
+//                    )
+//                }
+//            },
             placeholder = { Text(text = "Search Here")},
             shape = RoundedCornerShape(10.dp),
-
         )
+
+        Button(
+            onClick = {
+                Log.w("searchtext", searchText)
+                shouldShowLazyColumn.value = !shouldShowLazyColumn.value
+            },
+            modifier = Modifier.height(50.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Search,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp)
+            )
+        }
 //        IconButton(onClick = {
 //            for (item in matkul) {
 //                if(item.item!!.namaMatkul == searchText){
@@ -160,6 +204,22 @@ fun Search(navController: NavController) {
 //        }
 
 
+    }
+
+    if(shouldShowLazyColumn.value){
+        Spacer(modifier = Modifier.height(5.dp))
+        LazyColumn(){
+            items(matkul){
+                if(it.item!!.namaMatkul == searchText){
+                    DaftarMataKuliahDiminati(
+                        painter = painterResource(id = R.drawable.matakuliah),
+                        matakuliah = it.item!!.namaMatkul,
+                        fakultas = it.item!!.fakultas,
+                        navController = navController
+                    )
+                }
+            }
+        }
     }
     // logic filter search
 //    Button(onClick = {
