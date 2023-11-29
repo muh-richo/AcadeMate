@@ -1,11 +1,9 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.profil
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -59,7 +55,6 @@ import com.example.academate.R
 import com.example.academate.navigate.Route
 import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
-import com.example.academate.ui.theme.Putih
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -90,7 +85,6 @@ fun Profil(navController: NavController, viewModelUser: UserViewModel) {
         override fun onCancelled(error: DatabaseError) {
             Log.w(TAG, "Failed to read value.", error.toException())
         }
-
     })
 
     Box(
@@ -98,6 +92,15 @@ fun Profil(navController: NavController, viewModelUser: UserViewModel) {
             .background(Biru)
     ) {
         Scaffold(
+            modifier = Modifier.background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        colorResource(id = R.color.blue2),
+                        colorResource(id = R.color.white)
+                    ),
+                    startY = 300f
+                )
+            ),
             topBar = {
                 TopAppBar(
                     title = { Text(text = "Profil", fontWeight = FontWeight.Bold) },
@@ -112,7 +115,7 @@ fun Profil(navController: NavController, viewModelUser: UserViewModel) {
                         }
                     },
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
                 modifier = Modifier

@@ -1,4 +1,4 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.review
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,20 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,24 +30,20 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.navigate.Route
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputReviewMentor(navController: NavController){
-    var inputComment by remember {
-        mutableStateOf("")
-    }
+fun ReviewMentor(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -173,78 +162,67 @@ fun InputReviewMentor(navController: NavController){
                         .border(1.dp, Color(0xF222222))
                         .padding(horizontal = 20.dp, vertical = 30.dp)
                         .fillMaxWidth()
-//                                    .height(350.dp)
+                    //                                    .height(350.dp)
                 ){
-                    Text(
-                        text = "Comment",
-                        fontSize = 18.sp,
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(bottom = 5.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Column (
-                        modifier = Modifier
-                            .background(
-                                Color.White,
-                                shape = RoundedCornerShape(
-                                    corner = CornerSize(
-                                        10.dp
-                                    )
-                                )
-                            )
-                            .padding(vertical = 15.dp, horizontal = 20.dp)
-                            .fillMaxWidth()
                     ){
-                        Row (
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        ){
-                            Box(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(Color.Green)
-                                    .size(30.dp)
-                            ){
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                )
-                            }
-                            Text(
-                                text = "Aziz Purnomo",
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
-                        LazyRow(
-                            modifier = Modifier.padding(vertical = 14.dp)
-                        ){
-                            items(5){
-                                Image(painter = painterResource(id = R.drawable.heart), contentDescription = null)
-                            }
-                        }
-                        OutlinedTextField(
-                            value = inputComment,
-                            onValueChange = {text ->
-                                inputComment = text
-                            },
-                            placeholder = {
-                                Text(text = "Type here", fontSize = 12.sp)
-                            },
-                            modifier = Modifier
-                                .background(
-                                    Color.Transparent,
-                                    shape = RoundedCornerShape(corner = CornerSize(10.dp))
-                                )
-                                .height(200.dp),
-                            textStyle = TextStyle(fontSize = 12.sp)
+                        Text(
+                            text = "Comment",
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(bottom = 5.dp)
                         )
+
+                        Button(
+                            onClick = {
+                                      navController.navigate(Route.INPUTREVIEWMENTOR)
+                            },
+                            modifier = Modifier.padding(start = 30.dp)
+                        ) {
+                            Text(text = "Add Comment")
+                        }
                     }
-                    Button(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(top = 16.dp)
-                    ) {
-                        Text(text = "Add Comment")
+
+                    LazyColumn {
+                        items(4) {
+                            Spacer(modifier = Modifier.height(25.dp))
+                            Column (
+                                modifier = Modifier
+                                    .background(
+                                        Color.White,
+                                        shape = RoundedCornerShape(
+                                            corner = CornerSize(
+                                                10.dp
+                                            )
+                                        )
+                                    )
+                                    .padding(vertical = 15.dp, horizontal = 20.dp)
+                            ){
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                ){
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(CircleShape)
+                                            .background(Color.Green)
+                                            .size(30.dp)
+                                    ){
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                        )
+                                    }
+                                    Text(
+                                        text = "Aziz Purnomo",
+                                        modifier = Modifier.padding(start = 8.dp)
+                                    )
+                                }
+                                Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas maecenas pharetra convallis")
+                            }
+                        }
                     }
                 }
             }

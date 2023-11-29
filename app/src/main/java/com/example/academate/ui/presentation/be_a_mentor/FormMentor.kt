@@ -1,32 +1,25 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.be_a_mentor
 
-import android.content.ContentValues
-import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -46,9 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,11 +46,7 @@ import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
 import com.example.academate.ui.presentation.login_screen.UserViewModel
-import com.example.academate.ui.presentation.signup_screen.User
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
@@ -83,6 +69,46 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
+            .drawBehind {
+                // Setting the angle in radians
+                val angleRad = 60f / 180f * 3.14f
+
+                // Fractional x
+                val x = cos(angleRad)
+                    .toFloat()
+
+                // Fractional y
+                val y = sin(angleRad)
+                    .toFloat()
+
+                // Set the Radius and offset as shown below
+                val radius = sqrt(size.width.pow(2) + size.height.pow(2)) / 2f
+                val offset = center + Offset(x * radius, y * radius)
+
+                // Setting the exact offset
+                val exactOffset = Offset(
+                    x = min(offset.x.coerceAtLeast(0f), size.width),
+                    y = size.height - min(
+                        offset.y.coerceAtLeast(0f),
+                        size.height
+                    )
+                )
+
+                // Draw a rectangle with the above values
+                drawRect(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFFFFFFFF),
+                            Color(0xFFB2D1FF), // Warna 2: Biru Muda (#B2D1FF)
+                            Color(0xFFB2D1FF), // Warna 2: Biru Muda (#B2D1FF)
+                            Color(0xFF0065FF), // Warna 1: Biru (#0065FF)
+                        ),
+                        start = Offset(size.width, size.height) - exactOffset,
+                        end = exactOffset
+                    ),
+                    size = size
+                )
+            }
     ) {
         var name by remember { mutableStateOf("") }
         var course by remember { mutableStateOf("") }
@@ -92,55 +118,12 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .drawBehind {
-                    // Setting the angle in radians
-                    val angleRad = 60f / 180f * 3.14f
-
-                    // Fractional x
-                    val x = cos(angleRad)
-                        .toFloat()
-
-                    // Fractional y
-                    val y = sin(angleRad)
-                        .toFloat()
-
-                    // Set the Radius and offset as shown below
-                    val radius = sqrt(size.width.pow(2) + size.height.pow(2)) / 2f
-                    val offset = center + Offset(x * radius, y * radius)
-
-                    // Setting the exact offset
-                    val exactOffset = Offset(
-                        x = min(offset.x.coerceAtLeast(0f), size.width),
-                        y = size.height - min(
-                            offset.y.coerceAtLeast(0f),
-                            size.height
-                        )
-                    )
-
-                    // Draw a rectangle with the above values
-                    drawRect(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFFFFFFFF),
-                                Color(0xFFB2D1FF), // Warna 2: Biru Muda (#B2D1FF)
-                                Color(0xFFB2D1FF), // Warna 2: Biru Muda (#B2D1FF)
-                                Color(0xFF0065FF), // Warna 1: Biru (#0065FF)
-                            ),
-                            start = Offset(size.width, size.height) - exactOffset,
-                            end = exactOffset
-                        ),
-                        size = size
-                    )
-                }
         ){
             Column (
                 modifier = Modifier
                     .fillMaxSize()
-//                    .padding(horizontal = 16.dp),
             ){
                 Row (
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    modifier = Modifier.padding(vertical = 25.dp)
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -308,10 +291,8 @@ fun FormMentor(navController: NavController, viewModelUser: UserViewModel){
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(IntrinsicSize.Min)
-                            .background(
-                                colorResource(id = R.color.blue1)
-                            )
+                            .height(IntrinsicSize.Min),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.blue1))
                     ) {
                         Text(text = "Submit")
                     }

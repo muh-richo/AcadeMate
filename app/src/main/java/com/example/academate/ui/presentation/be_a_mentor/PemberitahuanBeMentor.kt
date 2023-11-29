@@ -1,7 +1,8 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.be_a_mentor
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +25,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -83,16 +89,22 @@ fun PemberitahuanBeMentor(navController: NavController){
                 .fillMaxSize()
                 .padding(horizontal = 20.dp),
         ){
-            Row (
+            Row(
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 25.dp)
-            ){
-                Image(painter = painterResource(id = R.drawable.arrowleft), contentDescription = null)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, top = 6.dp, end = 10.dp, bottom = 6.dp)
+            ) {
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                }
                 Text(
                     text = "Be a Mentor",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 14.dp)
                 )
             }
             Spacer(modifier = Modifier.height(200.dp))
@@ -120,8 +132,6 @@ fun PemberitahuanBeMentor(navController: NavController){
                     fontWeight = FontWeight.Light,
                     textAlign = TextAlign.Center
                 )
-
-
             }
         }
     }

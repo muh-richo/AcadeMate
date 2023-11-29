@@ -171,7 +171,6 @@ fun DaftarMataKuliah(
                                 .fillMaxWidth(0.3f)
                         )
                     }
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

@@ -1,4 +1,4 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.mentor
 
 import android.content.ContentValues
 import android.os.Build
@@ -17,21 +17,25 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -43,12 +47,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,11 +61,7 @@ import com.example.academate.R
 import com.example.academate.navigate.Route
 import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
-import com.example.academate.ui.theme.BiruMuda
 import com.example.academate.ui.theme.Putih
-import com.example.academate.ui.theme.matkul
-import com.example.academate.ui.theme.matkul2
-import com.example.academate.ui.theme.matkul3
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -127,8 +127,8 @@ fun InformasiMentor(navController: NavController, userViewModel: UserViewModel){
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Biru,
-                        Putih
+                        colorResource(id = R.color.blue2),
+                        colorResource(id = R.color.white)
                     ),
                     startY = 300f
                 )
@@ -157,9 +157,7 @@ fun HeaderMentor(
             .fillMaxWidth()
     ) {
         IconButton(
-            onClick = {
-                navController.popBackStack()
-                      },
+            onClick = { navController.popBackStack() },
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack, contentDescription = "Back"
@@ -174,6 +172,7 @@ fun HeaderMentor(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String){
     Column {
@@ -188,72 +187,71 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.3f)
+                    .height(300.dp)
                     .shadow(8.dp)
             )
         }
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(8.dp)
+                .padding(16.dp)
         ) {
-            Column(
+            Text(
+                text = namaLengkap,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "Mata Kuliah",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = matakuliah,
+                fontSize = 12.sp,
                 modifier = Modifier
-                    .padding(15.dp)
-            ) {
-                Row(
-                    verticalAlignment= Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .padding(top = 5.dp, bottom = 5.dp)
-                ) {
+                    .padding(bottom = 16.dp)
+            )
+            Text(
+                text = "Pengalaman",
+                fontSize = 18.sp ,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = pengalaman,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+            )
+            var waktu by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = waktu,
+                onValueChange = {waktu = it},
+                label = {
                     Text(
-                        text = namaLengkap,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-
-                Text(
-                    text = "Pengalaman",
-                    fontSize = 16.sp ,
-                    fontWeight = FontWeight.Bold
-
+                        text = "Waktu Sewa",
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    ) 
+                },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 40.dp, max = 60.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black, // Warna teks
+                    placeholderColor = Color.Black,
+                    focusedBorderColor = Color.Black, // Warna border saat fokus
+                    unfocusedBorderColor = Color.Black // Warna border saat tidak fokus
                 )
-                Text(
-                    text = pengalaman,
-                    fontSize = 12.sp,
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                )
-
-                Text(
-                    text = "Mata Kuliah",
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                )
-                Text(
-                    text = matakuliah,
-                    fontSize = 11.sp,
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                )
-
-
-            }
-//                Row(
-//                    verticalAlignment= Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.SpaceBetween,
-//                    modifier = Modifier
-//                        .padding(top = 5.dp, bottom = 5.dp)
-//                ) {
-
-            }
-
+            )
+            Spacer(modifier = Modifier.height(30.dp))
         }
     }
+}
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -271,7 +269,7 @@ fun ButtonMentor(
         colors = ButtonDefaults.buttonColors(colorResource(id = R.color.blue1)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 20.dp),
+            .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 20.dp),
         onClick = {
             showDialog = true
         }) {
@@ -307,11 +305,11 @@ fun ButtonMentor(
                         onClick = {
                             //generatewaktu
                             val currentDateTime= LocalDateTime.now()
-                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyy:HH-mm-ss")
+                            val formatter= DateTimeFormatter.ofPattern("dd-MM-yyyy : HH-mm-ss")
                             val formattedDateTime=currentDateTime.format(formatter)
 
                             var riwayatNode=user.child("riwayat")
-                            var riwayat=Riwayat(namaMentor,course, formattedDateTime.toString())
+                            var riwayat= Riwayat(namaMentor,course, formattedDateTime.toString())
                             var id = UUID.randomUUID().toString()
 
 //                            var riwayatItem = riwayatNode.child(id).setValue(riwayat)
@@ -358,5 +356,5 @@ fun ButtonMentor(
 
 }
 
-//untukmenyimpandatariwayat
+// untuk menyimpan daftar riwayat
 data class Riwayat(var namaMentor:String,var course:String, var waktu: String)

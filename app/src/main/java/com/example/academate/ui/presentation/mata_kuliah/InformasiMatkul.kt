@@ -111,9 +111,6 @@ fun InformasiMatkul(
                 Spacer(modifier = Modifier.height(50.dp))
             }
         }
-//        LazyColumn(){
-//            HeaderInformasiMatkul(namaMatkul = , navController = )
-//        }
     }
 }
 
@@ -163,7 +160,8 @@ fun DeskripsiMatkul(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(4.dp)
+                    .height(300.dp)
+                    .shadow(8.dp)
             )
         }
         Box(
@@ -172,32 +170,31 @@ fun DeskripsiMatkul(
                 .padding(15.dp, 10.dp)
         ){
             Column {
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = namaMatkul,
                     color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = fakultas,
                     color = Color.DarkGray,
-                    fontSize = 10.sp
+                    fontSize = 16.sp
                 )
-
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = "Deskripsi",
                     color = Color.Black,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(top = 10.dp)
                 )
                 Text(
                     text = desc,
                     color = Color.DarkGray,
                     fontSize = 12.sp
                 )
-                Spacer(modifier = Modifier.height(90.dp))
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
     }

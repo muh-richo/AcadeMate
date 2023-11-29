@@ -1,4 +1,4 @@
-package com.example.academate.ui.presentation
+package com.example.academate.ui.presentation.onBoarding
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
