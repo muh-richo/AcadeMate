@@ -1,14 +1,14 @@
 package com.example.academate.ui.presentation.login_screen
 
+import android.content.ContentValues
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
@@ -26,7 +25,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,28 +46,65 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
-import com.example.academate.ui.theme.AcadeMateTheme
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewModel()) {
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
+fun Login(navController: NavController,viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()) {
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val users = database.getReference("users") // pointer ke root users
+    val mentorRef = database.getReference("mentors")
+
+    // mutable state untuk form
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val state = viewModel.signInState.collectAsState(initial = null)
+
+    mentorRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+
+            (snapshotValue as? Map<String, Any>)?.forEach { (key, value) ->
+                val currentUserCheck = mentorRef.child(key)
+                currentUserCheck.addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+                        val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
+
+                        var name = map?.get("nama_lengkap").toString()
+                        var course = map?.get("course").toString()
+
+                        // set data
+                        viewModelUser.addToNameList(name)
+                        viewModelUser.addToCourseList(course)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                    }
+                })
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+        }
+    })
 
     Column(
         modifier = Modifier
@@ -149,11 +184,42 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
-//                              navController.navigate(Route.HOME)
-//                        menambahkan login
+                        // menjalankan logika login
                         scope.launch {
                             viewModel.loginUser(email, password)
                         }
+
+                        // mencari username menggunakan email yang digunakan untuk login
+                        users.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+
+                                (snapshotValue as? Map<String, Any>)?.forEach { (key, value) ->
+                                    val currentUserCheck = users.child(key)
+                                    currentUserCheck.addValueEventListener(object : ValueEventListener {
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+                                            val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
+
+                                            var DatabaseUserEmail = map?.get("email").toString()
+                                            if (DatabaseUserEmail == email) {
+                                                // mendapatkan username current user
+                                                viewModelUser.setUsername(key)
+                                                Log.w("Key", key)
+                                            }
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                                        }
+                                    })
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                            }
+                        })
                     },
                     modifier = Modifier
                         .fillMaxWidth(),

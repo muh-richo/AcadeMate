@@ -1,6 +1,7 @@
 package com.example.academate.navigate
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -23,9 +24,15 @@ import com.example.academate.ui.presentation.SplashScreen
 import com.example.academate.ui.presentation.mata_kuliah.InformasiMatkul
 import com.example.academate.ui.presentation.onBoarding.onBoarding1
 import com.example.academate.ui.presentation.onBoarding.onBoarding2
+import com.example.academate.ui.presentation.login_screen.UserViewModel
+import com.example.academate.ui.presentation.onBoarding.onBoarding1
+import com.example.academate.ui.presentation.onBoarding.onBoarding2
 
 @Composable
-fun Navigasi(navController: NavHostController) {
+fun Navigasi(
+    navController: NavHostController,
+    userViewModel: UserViewModel = viewModel()
+) {
     NavHost(navController = navController, startDestination = Route.SPLASHSCREEN) {
         composable(Route.SPLASHSCREEN) {
             SplashScreen(navController)
@@ -37,14 +44,14 @@ fun Navigasi(navController: NavHostController) {
             onBoarding2(navController)
         }
         composable(Route.LOGIN){
-            Login(navController)
+            Login(navController, userViewModel)
         }
         composable(Route.SIGNUP){
             SignUp(navController)
         }
 
         composable(Route.HOME) {
-            HomeScreen(navController)
+            HomeScreen(navController, userViewModel)
         }
         composable(Route.MATAKULIAH) {
             MataKuliah(navController)
@@ -52,19 +59,6 @@ fun Navigasi(navController: NavHostController) {
         composable(Route.INFORMASI_MATKUL) {
             InformasiMatkul(navController = navController)
         }
-//        composable(
-//            Route.INFORMASI_MATKUL + "?idMatkul={id}",
-//            arguments = listOf(
-//                navArgument(name = "id") {
-//                    type = NavType.StringType
-//                }
-//            )
-//        ){
-//            val idMatkul = it.arguments?.getString("id")
-//            idMatkul?.let {
-//                InformasiMatkul(navController = navController, idMatkul = idMatkul)
-//            }
-//        }
         composable(Route.DAFTARMENTORRPL){
             DaftarMentor(navController)
         }
@@ -75,10 +69,10 @@ fun Navigasi(navController: NavHostController) {
             SearchScreen(navController)
         }
         composable(Route.PROFILE) {
-            Profil(navController)
+            Profil(navController, userViewModel)
         }
         composable(Route.FORMMENTOR){
-            FormMentor(navController)
+            FormMentor(navController, userViewModel)
         }
         composable(Route.PEMBERITAHUANBEMENTOR){
             PemberitahuanBeMentor(navController)

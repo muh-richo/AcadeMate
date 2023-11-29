@@ -1,5 +1,8 @@
 package com.example.academate.ui.presentation
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,11 +37,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -48,12 +57,45 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profil(navController: NavController) {
+fun Profil(navController: NavController, viewModelUser: UserViewModel) {
+
+    val username by viewModelUser.username.collectAsState()
+    var status by remember { mutableStateOf("Member") }
+
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val mentorRef = database.getReference("users").child(username) // pointer ke user current
+
+    // mengambil status apakah mentor atau bukan
+    mentorRef.addValueEventListener(object: ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+            val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
+
+            var mentor = map?.get("mentor").toString()
+            if ( mentor == "true") {
+                // mendapatkan username current user
+                status = "Mentor"
+                Log.w("mentor", status)
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(TAG, "Failed to read value.", error.toException())
+        }
+
+    })
+
     Box(
         modifier = Modifier
             .background(Biru)
@@ -94,14 +136,14 @@ fun Profil(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "M Richo Abadinata",
+                    text = username,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Member",
+                    text = status,
                     fontSize = 16.sp,
                     color = Color.Black
                 )

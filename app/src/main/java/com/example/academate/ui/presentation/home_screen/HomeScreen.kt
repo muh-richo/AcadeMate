@@ -1,5 +1,8 @@
 package com.example.academate.ui.presentation.home_screen
 
+import android.content.ContentValues
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +28,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,29 +47,53 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.data.model.MataKuliahModelResponse
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.SignInViewModel
+import com.example.academate.ui.presentation.login_screen.UserViewModel
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.example.academate.util.Resource
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
 
+    val name by viewModelUser.nameList.collectAsState()
+    val course by viewModelUser.courseList.collectAsState()
+
+    val nameList = name.toList()
+    val courseList = course.toList()
+
+    // inisialisasi untuk username yang sudah di dapatkan di login
+    val username by viewModelUser.username.collectAsState()
+    Log.w("username", username)
+
+    // pmatakuliah
     val mataKuliahRepository = MataKuliahRepository()
     val scope = rememberCoroutineScope()
     var matkul by remember {
         mutableStateOf<List<MataKuliahModelResponse>>(emptyList())
     }
+
+
 
     LaunchedEffect(key1 = true, block = {
         scope.launch {
@@ -91,29 +125,21 @@ fun HomeScreen(navController: NavController){
 
         Column(
         ) {
-            Greet(navController)
+            Greet(username, navController)
             MentorTerbaik()
 
             val scrollState = rememberScrollState()
-            Row(
+            LazyRow(
                 modifier = Modifier
-                    .horizontalScroll(scrollState)
+//                    .horizontalScroll(scrollState)
             ) {
-                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor),
-                    nama = "Arif Rama Putra Sa’id",
-                    matakuliah = "Jaringan Saraf Tiruan",
-                    navController = navController
-                )
-                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor3),
-                    nama = "M Richo Abadinata",
-                    matakuliah = "Pemrograman Dasar",
-                    navController = navController
-                )
-                ListMentorTerbaik(painter = painterResource(id = R.drawable.profile_mentor2),
-                    nama = "Aziz Purnomo",
-                    matakuliah = "Rekayasa Perangkat Lunak",
-                    navController = navController
-                )
+                items(nameList.size){currentIndex ->
+                    ListMentorTerbaik(painter = painterResource(id = R.drawable.foto_profil),
+                        nama = nameList[currentIndex],
+                        matakuliah = courseList[currentIndex],
+                        navController = navController
+                    )
+                }
             }
 
             matakuliahDiminati()
@@ -135,7 +161,7 @@ fun HomeScreen(navController: NavController){
 
 @Composable
 fun Greet(
-//    nama: String
+    nama: String,
     navController: NavController
 ){
     Card(
@@ -150,7 +176,7 @@ fun Greet(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Selamat Datang!",
+                text = "Selamat Datang $nama!",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -212,13 +238,6 @@ fun ListMentorTerbaik(
                     .fillMaxSize()
                     .padding(bottom = 16.dp)
                     .background(
-//                        Brush.verticalGradient(
-//                            colors = listOf(
-//                                BiruMuda,
-//                                Putih
-//                            ),
-//                            startY = 100f
-//                        )
                         Color.Transparent
                     )
             ) {
@@ -308,6 +327,7 @@ fun DaftarMataKuliahDiminati(
                 Row {
                     Box(modifier = Modifier
                         .height(80.dp)
+
                     ){
                         Image(
                             painter = painter,
@@ -316,7 +336,9 @@ fun DaftarMataKuliahDiminati(
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                         )
+
                     }
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
