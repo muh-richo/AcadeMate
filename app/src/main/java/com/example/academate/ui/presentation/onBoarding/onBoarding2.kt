@@ -46,13 +46,14 @@ fun onBoarding2(navController: NavController) {
         verticalArrangement = Arrangement.Bottom
     ){
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.logoo),
             contentDescription = "logo",
             modifier = Modifier
                 .padding(top = 140.dp)
-                .size(175.dp)
+                .size(370.dp)
         )
-        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(80.dp))
+//        Spacer(modifier = Modifier.height(150.dp))
         Text(
             text = "Perlihatkan Potensi Anda",
             fontSize = 24.sp,

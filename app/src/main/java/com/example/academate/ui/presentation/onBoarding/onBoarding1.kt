@@ -48,13 +48,14 @@ fun onBoarding1(navController: NavController) {
         verticalArrangement = Arrangement.Bottom
     ){
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.logoo),
             contentDescription = "logo",
             modifier = Modifier
                 .padding(top = 150.dp)
-                .size(175.dp)
+                .size(370.dp)
         )
-        Spacer(modifier = Modifier.height(150.dp))
+//        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(80.dp))
         Text(
             text = "Welcome to AcadeMate",
             fontSize = 24.sp,

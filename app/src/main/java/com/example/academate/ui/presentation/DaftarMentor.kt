@@ -41,11 +41,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
+import com.example.academate.ui.theme.AcadeMateTheme
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
@@ -101,11 +103,12 @@ fun DaftarMentor(navController: NavController){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 8.dp)
         ){
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, top = 6.dp, end = 10.dp, bottom = 6.dp)
             ){
                 IconButton(onClick = {
                     navController.popBackStack()
@@ -135,11 +138,13 @@ fun DaftarMentor(navController: NavController){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MentorListView(riwayat: Array<Int>, navController: NavController){
+fun MentorListView(
+    riwayat: Array<Int>,
+    navController: NavController
+){
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(riwayat) { currentRiwayat ->
@@ -147,10 +152,14 @@ fun MentorListView(riwayat: Array<Int>, navController: NavController){
                 modifier = Modifier
                     .background(
                         color = Color(0xFFEAEAEA),
-                        shape = RoundedCornerShape(corner = CornerSize(10.dp))
+                        shape = RoundedCornerShape(corner = CornerSize(12.dp))
                     )
-                    .border(1.dp, Color(0xF222222))
-                    .padding(horizontal = 7.dp, vertical = 11.dp),
+                    .border(
+                        1.dp, Color(0xF222222),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 //                Card(
@@ -213,8 +222,7 @@ fun MentorListView(riwayat: Array<Int>, navController: NavController){
                         modifier = Modifier.size(85.dp)
                     )
                 }
-
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(14.dp))
                 Column {
                     Text(
                         text = "Rekayasa Perangkat Lunak",
@@ -225,7 +233,6 @@ fun MentorListView(riwayat: Array<Int>, navController: NavController){
                         text = "Arif Rama Putra Said",
                         fontSize = 12.sp,
                         lineHeight = 15.sp,
-                        modifier = Modifier.padding(top = 8.dp, bottom = 6.dp)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
@@ -252,3 +259,11 @@ fun MentorListView(riwayat: Array<Int>, navController: NavController){
         }
     }
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun MentorListPreview() {
+//    AcadeMateTheme {
+//        MentorListView(riwayat = arrayOf(1,2,3,4))
+//    }
+//}

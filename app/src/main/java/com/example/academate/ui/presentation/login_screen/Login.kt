@@ -79,18 +79,21 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.logooo),
             contentDescription = "logo",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(270.dp)
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "AcadeMate",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-        Spacer(modifier = Modifier.height(50.dp))
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Text(
+//            text = "AcadeMate",
+//            fontSize = 32.sp,
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White
+//        )
+//        Spacer(modifier = Modifier.height(50.dp))
+        
+//        Spacer(modifier = Modifier.height(10.dp))
+        
         Card (
             modifier = Modifier
                 .fillMaxWidth()
@@ -150,7 +153,7 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
                 Button(
                     onClick = {
 //                              navController.navigate(Route.HOME)
-//                        menambahkan login
+                        // menambahkan login
                         scope.launch {
                             viewModel.loginUser(email, password)
                         }
@@ -165,7 +168,7 @@ fun Login(navController: NavController, viewModel: SignInViewModel = hiltViewMod
                     )
                 }
 
-//                menambahkan loading setelah submit
+                // menambahkan loading setelah submit
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
