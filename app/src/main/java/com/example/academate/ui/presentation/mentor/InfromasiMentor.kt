@@ -224,31 +224,32 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
                     .padding(bottom = 16.dp)
             )
             var waktu by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = waktu,
-                onValueChange = {waktu = it},
-                label = {
-                    Text(
-                        text = "Waktu Sewa",
-                        fontSize = 12.sp,
-                        color = Color.Black
-                    ) 
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 40.dp, max = 60.dp),
-                shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = Color.Black, // Warna teks
-                    placeholderColor = Color.Black,
-                    focusedBorderColor = Color.Black, // Warna border saat fokus
-                    unfocusedBorderColor = Color.Black // Warna border saat tidak fokus
-                )
-            )
-            Spacer(modifier = Modifier.height(30.dp))
+//            OutlinedTextField(
+//                value = waktu,
+//                onValueChange = {waktu = it},
+//                label = {
+//                    Text(
+//                        text = "Waktu Sewa",
+//                        fontSize = 12.sp,
+//                        color = Color.Black
+//                    )
+//                },
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Done
+//                ),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .heightIn(min = 40.dp, max = 60.dp),
+//                shape = RoundedCornerShape(8.dp),
+//                colors = TextFieldDefaults.outlinedTextFieldColors(
+//                    textColor = Color.Black, // Warna teks
+//                    placeholderColor = Color.Black,
+//                    focusedBorderColor = Color.Black, // Warna border saat fokus
+//                    unfocusedBorderColor = Color.Black // Warna border saat tidak fokus
+//                )
+//            )
+//            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(50.dp))
         }
     }
 }

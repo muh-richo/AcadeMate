@@ -51,6 +51,7 @@ import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.data.model.MataKuliahModelResponse
+import com.example.academate.data.repository.CurrentMatkulViewModel
 import com.example.academate.navigate.Route
 import com.example.academate.ui.presentation.login_screen.SignInViewModel
 import com.example.academate.ui.presentation.login_screen.UserViewModel
@@ -60,7 +61,11 @@ import com.example.academate.util.Resource
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewModel: SignInViewModel = hiltViewModel()){
+fun HomeScreen(
+    navController: NavController,
+    viewModelUser: UserViewModel,
+    matkulViewModel: CurrentMatkulViewModel
+){
 
     val mentorDetails by viewModelUser.mentorDetails.collectAsState()
     val keysList: List<String> = mentorDetails.keys.toList()
@@ -88,7 +93,9 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
         }
     })
 
-    LazyColumn(
+
+
+    Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
@@ -102,7 +109,7 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
             )
             .padding(bottom = 80.dp)
     ){
-        items(1){
+//        items(1){
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -122,16 +129,30 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
                 }
                 matakuliahDiminati()
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    for (matkulItem in matkul) {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                ) {
+//                    for (matkulItem in matkul) {
+//                        DaftarMataKuliahDiminati(
+//                            painter = painterResource(id = R.drawable.matakuliah),
+//                            matakuliah = matkulItem.item?.namaMatkul ?: "",
+//                            fakultas = matkulItem.item?.fakultas ?: "",
+//                            navController = navController,
+//
+//                        )
+//                    }
+//                }
+
+                LazyColumn(){
+                    items(matkul.size){item ->
                         DaftarMataKuliahDiminati(
                             painter = painterResource(id = R.drawable.matakuliah),
-                            matakuliah = matkulItem.item?.namaMatkul ?: "",
-                            fakultas = matkulItem.item?.fakultas ?: "",
-                            navController = navController
+                            matakuliah = matkul[item].item!!.namaMatkul,
+                            fakultas = matkul[item].item!!.fakultas,
+                            navController = navController,
+                            matkulViewModel,
+                            item+1
                         )
                     }
                 }
@@ -149,7 +170,7 @@ fun HomeScreen(navController: NavController, viewModelUser: UserViewModel, viewM
             }
         }
     }
-}
+//}
 
 @Composable
 fun Greet(
@@ -197,7 +218,7 @@ fun MentorTerbaik(){
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 12.dp)
     ) {
         Text(
-            text = "Mentor Terbaik Minggu Ini",
+            text = "Mentor",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
@@ -287,7 +308,7 @@ fun matakuliahDiminati(){
             .padding(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 12.dp)
     ) {
         Text(
-            text = "Mata Kuliah Banyak Diminati",
+            text = "Mata Kuliah",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
@@ -300,8 +321,10 @@ fun DaftarMataKuliahDiminati(
     painter: Painter,
     matakuliah: String,
     fakultas: String,
-    modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    matkulViewModel: CurrentMatkulViewModel,
+    matkulIndex: Int,
+    modifier: Modifier = Modifier
 ){
     Column(
         modifier = Modifier
@@ -315,6 +338,7 @@ fun DaftarMataKuliahDiminati(
                 .padding(start = 20.dp, end = 20.dp, bottom = 5.dp),
             onClick = {
                 navController.navigate(Route.INFORMASI_MATKUL)
+                matkulViewModel.setCurrentMatkul(matkulIndex)
             }
         ) {
             Box(

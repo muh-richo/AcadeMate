@@ -148,14 +148,14 @@ fun Profil(navController: NavController, viewModelUser: UserViewModel) {
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(36.dp))
-                ProfilMenu(navController)
+                ProfilMenu(navController, status)
             }
         }
     }
 }
 
 @Composable
-fun ProfilMenu(navController: NavController) {
+fun ProfilMenu(navController: NavController, status:String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,26 +171,39 @@ fun ProfilMenu(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
 
+        if(status == "Member") {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .padding(8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Star,
-                    contentDescription = "be_a_mentor",
-                    modifier = Modifier.size(32.dp),
-                )
-                ClickableText(
-                    text = AnnotatedString("Be a Mentor"),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 16.sp,
-                    ),
-                    onClick = {
-                        navController.navigate(Route.FORMMENTOR)
-                    }
-                )
+                    Icon(
+                        imageVector = Icons.Outlined.Star,
+                        contentDescription = "be_a_mentor",
+                        modifier = Modifier.size(32.dp),
+                    )
+                    ClickableText(
+                        text = AnnotatedString("Be a Mentor"),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 16.sp,
+                        ),
+                        onClick = {
+                            navController.navigate(Route.FORMMENTOR)
+                        }
+                    )
+                }
+//                } else {
+//                    ClickableText(
+//                        text = AnnotatedString("You are a mentor"),
+//                        style = MaterialTheme.typography.bodySmall.copy(
+//                            fontSize = 16.sp,
+//                        ),
+//                        onClick = {
+////                            navController.navigate(Route.FORMMENTOR)
+//                        }
+//                    )
+//                }
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -238,3 +251,4 @@ fun ProfilMenu(navController: NavController) {
         }
     }
 }
+

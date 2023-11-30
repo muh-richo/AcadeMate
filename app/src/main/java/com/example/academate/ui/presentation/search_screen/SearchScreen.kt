@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.data.model.MataKuliahModelResponse
+import com.example.academate.data.repository.CurrentMatkulViewModel
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.ui.presentation.home_screen.DaftarMataKuliahDiminati
 import com.example.academate.ui.theme.AcadeMateTheme
@@ -83,7 +84,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavController) {
+fun SearchScreen(navController: NavController, matkulViewModel: CurrentMatkulViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -172,15 +173,17 @@ fun SearchScreen(navController: NavController) {
 
         // logic search
         if(shouldShowLazyColumn.value){
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(5.dp))
             LazyColumn(){
-                items(matkul){
-                    if(it.item!!.namaMatkul == searchText){
+                items(matkul.size){item ->
+                    if(matkul[item].item!!.namaMatkul == searchText){
                         DaftarMataKuliahDiminati(
                             painter = painterResource(id = R.drawable.matakuliah),
-                            matakuliah = it.item!!.namaMatkul,
-                            fakultas = it.item!!.fakultas,
-                            navController = navController
+                            matakuliah = matkul[item].item!!.namaMatkul,
+                            fakultas = matkul[item].item!!.fakultas,
+                            navController = navController,
+                            matkulViewModel,
+                            item+1
                         )
                     }
                 }

@@ -1,5 +1,7 @@
 package com.example.academate.ui.presentation.mata_kuliah
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,41 +47,50 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.data.model.MataKuliahModelResponse
+import com.example.academate.data.repository.CurrentMatkulViewModel
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
 import com.example.academate.util.Resource
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.launch
 
 @Composable
 fun InformasiMatkul(
     navController: NavController,
+    matkulViewModel: CurrentMatkulViewModel
 //    idMatkul: String,
 //    viewModel: InformasiMatkulViewModel = hiltViewModel()
 ){
+    val currentMatkul by matkulViewModel.currentMatkul.collectAsState()
 
-//    LaunchedEffect(key1 = true, block = {
-//        viewModel.getMatkulDetail(idMatkul)
-//    })
-//
-//    val matkul by viewModel.matkul
+    // inisialisasi detail matakuliah
+    var namaMatkul by remember { mutableStateOf("") }
+    var fakultas by remember { mutableStateOf("") }
+    var desc by remember { mutableStateOf("") }
 
-    val mataKuliahRepository = MataKuliahRepository()
-    val scope = rememberCoroutineScope()
-    var matkul by remember {
-        mutableStateOf<List<MataKuliahModelResponse>>(emptyList())
-    }
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val matkulRef = database.getReference("MataKuliah")
 
-    LaunchedEffect(key1 = true, block = {
-        scope.launch {
-            mataKuliahRepository.getMataKuliah().collect {
-                when (it) {
-                    is Resource.Error -> {}
-                    is Resource.Loading -> {}
-                    is Resource.Success -> matkul = it.data!!
-                }
-            }
+    matkulRef.child("matkul$currentMatkul").addValueEventListener(object :
+        ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+            val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
+
+            namaMatkul = map?.get("namaMatkul").toString()
+            fakultas = map?.get("fakultas").toString()
+            desc = map?.get("desc").toString()
+
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
         }
     })
 
@@ -96,21 +108,16 @@ fun InformasiMatkul(
                 )
             )
     ){
-        LazyColumn() {
-            items(matkul) {
-                HeaderInformasiMatkul(
-                    namaMatkul = it.item!!.namaMatkul,
-                    navController = navController
-                )
-                DeskripsiMatkul(
-                    namaMatkul = it.item!!.namaMatkul,
-                    fakultas = it.item!!.fakultas,
-                    desc = it.item!!.desc
-                )
-                ButtonCariMentor(navController = navController)
-                Spacer(modifier = Modifier.height(50.dp))
-            }
-        }
+        HeaderInformasiMatkul(
+            namaMatkul = namaMatkul,
+            navController = navController
+        )
+        DeskripsiMatkul(
+            namaMatkul = namaMatkul,
+            fakultas = fakultas,
+            desc = desc
+        )
+        ButtonCariMentor(namaMatkul,matkulViewModel,navController = navController)
     }
 }
 
@@ -202,6 +209,8 @@ fun DeskripsiMatkul(
 
 @Composable
 fun ButtonCariMentor(
+    namaMatkul: String,
+    matkulViewModel: CurrentMatkulViewModel,
     modifier: Modifier = Modifier,
     navController: NavController
 ){
@@ -209,6 +218,7 @@ fun ButtonCariMentor(
         colors = ButtonDefaults.buttonColors(colorResource(id = R.color.blue1)),
         onClick = {
             navController.navigate(Route.DAFTARMENTORRPL)
+            matkulViewModel.setCurrentNamaMatkul(namaMatkul)
         },
         modifier = Modifier
             .fillMaxWidth()

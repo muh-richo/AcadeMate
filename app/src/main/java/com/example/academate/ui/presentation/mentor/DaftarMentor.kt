@@ -1,5 +1,7 @@
 package com.example.academate.ui.presentation.mentor
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,6 +31,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,7 +51,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.academate.R
+import com.example.academate.data.repository.CurrentMatkulViewModel
 import com.example.academate.navigate.Route
+import com.example.academate.ui.presentation.login_screen.UserViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.pow
@@ -52,8 +66,41 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 @Composable
-fun DaftarMentor(navController: NavController){
-    var riwayat = arrayOf(1,2,3,4)
+fun DaftarMentor(
+    navController: NavController,
+    matkulViewModel: CurrentMatkulViewModel,
+    userViewModel: UserViewModel
+){
+    val currentNamaMatkul by matkulViewModel.currentNamaMatkul.collectAsState()
+
+    // inisialisasi database
+    val database = FirebaseDatabase.getInstance()
+    val mentorRef = database.getReference("mentors")
+
+    // Membuat MutableStateFlow untuk menyimpan daftar mentor berdasarkan mata kuliah
+    val listMentorByMatkul = remember { MutableStateFlow<List<String>>(emptyList()) }
+
+    // Mendapatkan data mentor berdasarkan mata kuliah menggunakan Flow
+    mentorRef.orderByChild("course").equalTo(currentNamaMatkul).get().addOnSuccessListener { dataSnapshot ->
+        val mentorList = mutableListOf<String>()
+
+        dataSnapshot.children.forEach { mentorSnapshot ->
+            mentorSnapshot.key?.let { mentorKey ->
+                mentorList.add(mentorKey)
+            }
+        }
+
+        listMentorByMatkul.value = mentorList.toList()
+    }.addOnFailureListener {
+        // Penanganan kesalahan saat mengambil data
+    }
+
+    // Menggunakan collectAsState untuk mengamati perubahan pada listMentorByMatkul
+    val mentorListState = listMentorByMatkul.collectAsState()
+    //=============================================================================
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -128,37 +175,86 @@ fun DaftarMentor(navController: NavController){
                     .padding(start = 15.dp, bottom = 20.dp),
                 fontSize = 12.sp,
             )
-            MentorListView(riwayat = riwayat, navController = navController)
+            var namaMentor by remember { mutableStateOf("") }
+            var namaMatkul by remember { mutableStateOf("") }
+
+            for (mentorByMatkul in mentorListState.value){
+                mentorRef.child(mentorByMatkul).addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+                        val map: Map<String, Any>? = snapshot.getValue() as? Map<String, Any>
+
+                        namaMentor = map?.get("nama_lengkap").toString()
+                        namaMatkul = map?.get("course").toString()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                    }
+                })
+
+            }
+            LazyColumn{
+                items(mentorListState.value){
+
+                    var namaMentor by remember { mutableStateOf("") }
+                    var namaMatkul by remember { mutableStateOf("") }
+
+                    mentorRef.child(it).addValueEventListener(object :
+                        ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+                            val map: Map<String, Any>? = snapshot.getValue() as? Map<String, Any>
+
+                            namaMentor = map?.get("nama_lengkap").toString()
+                            namaMatkul = map?.get("course").toString()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                        }
+                    })
+                    MentorListView(
+                        navController = navController,
+                        namaMatkul,
+                        namaMentor,
+                        userViewModel)
+                }
+            }
+        }
+
         }
     }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MentorListView(
-    riwayat: Array<Int>,
-    navController: NavController
+    navController: NavController,
+    namaMatkul: String,
+    namaMentor: String,
+    userViewModel: UserViewModel
 ){
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(riwayat) { currentRiwayat ->
-            Row(
-                modifier = Modifier
-                    .background(
-                        color = Color(0xFFEAEAEA),
-                        shape = RoundedCornerShape(corner = CornerSize(12.dp))
-                    )
-                    .border(
-                        1.dp, Color(0xF222222),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+
+        Row(
+            modifier = Modifier
+                .background(
+                    color = Color(0xFFEAEAEA),
+                    shape = RoundedCornerShape(corner = CornerSize(12.dp))
+                )
+                .border(
+                    1.dp, Color(0xF222222),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 //                Card(
 //                    modifier = Modifier
 //                        .fillMaxWidth()
@@ -207,53 +303,53 @@ fun MentorListView(
 //                }
 
 
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(Color.Green)
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(Color.Green)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.foto_profil),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(85.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(14.dp))
+            Column {
+                Text(
+                    text = namaMatkul,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = namaMentor,
+                    fontSize = 12.sp,
+                    lineHeight = 15.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = {
+                              navController.navigate(Route.INFORMASIMENTOR)
+                        userViewModel.setMentorname(namaMentor)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier.height(15.dp),
+                    shape = RoundedCornerShape(0.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.foto_profil),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(85.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.width(14.dp))
-                Column {
                     Text(
-                        text = "Rekayasa Perangkat Lunak",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = "Arif Rama Putra Said",
+                        text = "Lihat Mentor",
                         fontSize = 12.sp,
-                        lineHeight = 15.sp,
+                        color = Color.Black,
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                                  navController.navigate(Route.INFORMASIMENTOR)
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent
-                        ),
-                        contentPadding = PaddingValues(0.dp),
-                        modifier = Modifier.height(15.dp),
-                        shape = RoundedCornerShape(0.dp)
-                    ) {
-                        Text(
-                            text = "Lihat Mentor",
-                            fontSize = 12.sp,
-                            color = Color.Black,
-                        )
-                        Icons.Default.KeyboardArrowRight
-                    }
+                    Icons.Default.KeyboardArrowRight
                 }
             }
-            Spacer(modifier = Modifier.height(15.dp))
         }
+        Spacer(modifier = Modifier.height(15.dp))
     }
 }
 

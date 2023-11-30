@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.data.repository.MataKuliahRepository
 import com.example.academate.data.model.MataKuliahModelResponse
+import com.example.academate.data.repository.CurrentMatkulViewModel
 import com.example.academate.navigate.Route
 import com.example.academate.ui.theme.Biru
 import com.example.academate.ui.theme.Putih
@@ -49,7 +50,10 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MataKuliah(navController: NavController) {
+fun MataKuliah(
+    navController: NavController,
+    matkulViewModel: CurrentMatkulViewModel
+) {
 
     val mataKuliahRepository = MataKuliahRepository()
     val scope = rememberCoroutineScope()
@@ -86,14 +90,14 @@ fun MataKuliah(navController: NavController) {
         Header(navController)
 
         LazyColumn() {
-            items(matkul) {
+            items(matkul.size) {item ->
                 DaftarMataKuliah(
-                    painter = painterResource(
-                        id = R.drawable.matakuliah
-                    ),
-                    idMatkul = it.item!!.id,
-                    matakuliah = it.item!!.namaMatkul,
-                    fakultas = it.item!!.fakultas,
+                    painter = painterResource(id = R.drawable.matakuliah),
+                    idMatkul = matkul[item].item!!.id,
+                    matakuliah = matkul[item].item!!.namaMatkul,
+                    fakultas = matkul[item].item!!.fakultas,
+                    matkulViewModel,
+                    item+1,
                     navController = navController
                 )
             }
@@ -135,6 +139,8 @@ fun DaftarMataKuliah(
     idMatkul: String,
     matakuliah: String,
     fakultas: String,
+    matkulViewModel: CurrentMatkulViewModel,
+    matkulIndex: Int,
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -150,6 +156,7 @@ fun DaftarMataKuliah(
                 .padding(start = 20.dp, end = 20.dp, bottom = 5.dp),
             onClick = {
                 navController.navigate(Route.INFORMASI_MATKUL)
+                matkulViewModel.setCurrentMatkul(matkulIndex)
 //                navController.navigate(Route.INFORMASI_MATKUL + "?idMatkul=$idMatkul.id}")
             }
         ) {

@@ -90,12 +90,6 @@ fun RiwayatScreen(navController: NavController, viewModel: UserViewModel){
                             waktu.add(map?.get("waktu").toString())
                         }
 
-//                        val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
-//                        val map: Map<String, Any>? = snapshotValue as? Map<String, Any>
-//
-//                        namaMentor.add(map?.get("namaMentor").toString())
-//                        matkul.add(map?.get("course").toString())
-//                        waktu.add(map?.get("waktu").toString())
                     }
 
                     override fun onCancelled(error: DatabaseError) {

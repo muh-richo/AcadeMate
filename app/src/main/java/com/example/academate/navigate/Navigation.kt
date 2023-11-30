@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.academate.component.SearchScreen
+import com.example.academate.data.repository.CurrentMatkulViewModel
 import com.example.academate.ui.presentation.mentor.DaftarMentor
 import com.example.academate.ui.presentation.be_a_mentor.FormMentor
 import com.example.academate.ui.presentation.home_screen.HomeScreen
@@ -31,6 +32,7 @@ import com.example.academate.ui.presentation.riwayat_sewa.RiwayatScreen
 @Composable
 fun Navigasi(
     navController: NavHostController,
+    matkulViewModel: CurrentMatkulViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel()
 ) {
     NavHost(navController = navController, startDestination = Route.SPLASHSCREEN) {
@@ -51,22 +53,22 @@ fun Navigasi(
         }
 
         composable(Route.HOME) {
-            HomeScreen(navController, userViewModel)
+            HomeScreen(navController, userViewModel, matkulViewModel)
         }
         composable(Route.MATAKULIAH) {
-            MataKuliah(navController)
+            MataKuliah(navController, matkulViewModel)
         }
         composable(Route.INFORMASI_MATKUL) {
-            InformasiMatkul(navController = navController)
+            InformasiMatkul(navController = navController, matkulViewModel)
         }
         composable(Route.DAFTARMENTORRPL){
-            DaftarMentor(navController)
+            DaftarMentor(navController, matkulViewModel, userViewModel)
         }
         composable(Route.INFORMASIMENTOR) {
             InformasiMentor(navController, userViewModel)
         }
         composable(Route.SEARCH) {
-            SearchScreen(navController)
+            SearchScreen(navController, matkulViewModel)
         }
         composable(Route.PROFILE) {
             Profil(navController, userViewModel)
