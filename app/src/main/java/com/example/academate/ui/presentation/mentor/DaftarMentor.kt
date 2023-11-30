@@ -204,7 +204,7 @@ fun DaftarMentor(
                     mentorRef.child(it).addValueEventListener(object :
                         ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val snapshotValue = snapshot.getValue() // Mengambil nilai dari snapshot
+
                             val map: Map<String, Any>? = snapshot.getValue() as? Map<String, Any>
 
                             namaMentor = map?.get("nama_lengkap").toString()
@@ -301,7 +301,6 @@ fun MentorListView(
 //                        }
 //                    }
 //                }
-
 
             Box(
                 modifier = Modifier
