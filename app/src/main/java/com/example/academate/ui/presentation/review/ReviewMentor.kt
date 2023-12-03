@@ -18,7 +18,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -95,10 +100,11 @@ fun ReviewMentor(navController: NavController){
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(top = 25.dp, bottom = 25.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.arrowleft),
-                    contentDescription = null
-                )
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                }
                 Text(
                     text = "Review",
                     fontSize = 20.sp,
@@ -144,7 +150,7 @@ fun ReviewMentor(navController: NavController){
                         Row (
                             verticalAlignment = Alignment.CenterVertically
                         ){
-                            Image(painter = painterResource(id = R.drawable.heart), contentDescription = null)
+                            Icon(imageVector = Icons.Default.Favorite, contentDescription = "heart", tint = Color.Red)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "4.3 / 5", fontSize = 10.sp)
                         }

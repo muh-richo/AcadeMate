@@ -157,7 +157,6 @@ fun DaftarMataKuliah(
             onClick = {
                 navController.navigate(Route.INFORMASI_MATKUL)
                 matkulViewModel.setCurrentMatkul(matkulIndex)
-//                navController.navigate(Route.INFORMASI_MATKUL + "?idMatkul=$idMatkul.id}")
             }
         ) {
             Box(

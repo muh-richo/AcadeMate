@@ -59,7 +59,7 @@ fun Navigasi(
             MataKuliah(navController, matkulViewModel)
         }
         composable(Route.INFORMASI_MATKUL) {
-            InformasiMatkul(navController = navController, matkulViewModel)
+            InformasiMatkul(navController, matkulViewModel)
         }
         composable(Route.DAFTARMENTORRPL){
             DaftarMentor(navController, matkulViewModel, userViewModel)

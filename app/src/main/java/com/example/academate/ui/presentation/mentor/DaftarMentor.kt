@@ -4,28 +4,23 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -98,8 +92,6 @@ fun DaftarMentor(
     // Menggunakan collectAsState untuk mengamati perubahan pada listMentorByMatkul
     val mentorListState = listMentorByMatkul.collectAsState()
     //=============================================================================
-
-
 
     Column(
         modifier = Modifier
@@ -169,10 +161,10 @@ fun DaftarMentor(
                 )
             }
             Text(
-                text = "Menampilkan Mentor Rekayasa Perangkat Lunak:",
+                text = "Menampilkan Mentor :",
                 modifier = Modifier
                     .alpha(0.5f)
-                    .padding(start = 15.dp, bottom = 20.dp),
+                    .padding(start = 20.dp, bottom = 12.dp),
                 fontSize = 12.sp,
             )
             var namaMentor by remember { mutableStateOf("") }
@@ -219,13 +211,14 @@ fun DaftarMentor(
                         navController = navController,
                         namaMatkul,
                         namaMentor,
-                        userViewModel)
+                        userViewModel
+                    )
                 }
             }
         }
 
-        }
     }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -237,125 +230,77 @@ fun MentorListView(
 ){
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Row(
+        Card(
             modifier = Modifier
-                .background(
-                    color = Color(0xFFEAEAEA),
-                    shape = RoundedCornerShape(corner = CornerSize(12.dp))
-                )
-                .border(
-                    1.dp, Color(0xF222222),
-                    shape = RoundedCornerShape(12.dp)
-                )
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .background(color = Color.Transparent)
+                .padding(start = 20.dp, end = 20.dp),
+            onClick = {
+                navController.navigate(Route.INFORMASIMENTOR)
+                userViewModel.setMentorname(namaMentor)
+            }
         ) {
-//                Card(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .background(color = Color.Transparent)
-//                        .padding(start = 20.dp, end = 20.dp, bottom = 5.dp),
-//                    onClick = {
-//                        navController.navigate(Route.INFORMASI_MATKUL)
-//                    }
-//                ) {
-//                    Box(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                    ) {
-//                        Row {
-//                            Box(modifier = Modifier
-//                                .height(80.dp)
-//                            ){
-//                                Image(
-//                                    painter = painterResource(id = R.drawable.foto_profil),
-//                                    contentDescription = null,
-//                                    contentScale = ContentScale.Crop,
-//                                    modifier = Modifier.size(70.dp)
-//                                )
-//                            }
-//                            Box(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(start = 15.dp, top = 10.dp)
-//                            ){
-//                                Column {
-//                                    Text(
-//                                        text = "Rekayasa Perangkat Lunak",
-//                                        fontSize = 18.sp,
-//                                        fontWeight = FontWeight.Medium
-//                                    )
-//                                    Text(
-//                                        text = "Arif Rama Putra Said",
-//                                        fontSize = 12.sp,
-//                                        lineHeight = 15.sp,
-//                                        modifier = Modifier.padding(top = 8.dp, bottom = 6.dp)
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-
             Box(
                 modifier = Modifier
-                    .clip(CircleShape)
-                    .background(Color.Green)
+                    .fillMaxWidth()
+                    .height(90.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.foto_profil),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(85.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(14.dp))
-            Column {
-                Text(
-                    text = namaMatkul,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = namaMentor,
-                    fontSize = 12.sp,
-                    lineHeight = 15.sp,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = {
-                              navController.navigate(Route.INFORMASIMENTOR)
-                        userViewModel.setMentorname(namaMentor)
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent
-                    ),
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier.height(15.dp),
-                    shape = RoundedCornerShape(0.dp)
-                ) {
-                    Text(
-                        text = "Lihat Mentor",
-                        fontSize = 12.sp,
-                        color = Color.Black,
-                    )
-                    Icons.Default.KeyboardArrowRight
+                Row {
+                    Box() {
+                        Image(
+                            painter = painterResource(id = R.drawable.foto_profil),
+                            contentDescription = "foto_mentor",
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(0.3f),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = namaMatkul,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.Black,
+                            )
+                            Text(
+                                text = namaMentor,
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Row(
+                                verticalAlignment = Alignment.Bottom
+                            ) {
+                                Text(
+                                    text = "Lihat Mentor",
+                                    fontSize = 10.sp,
+                                    color = Color.Gray,
+                                )
+                                Icon(
+                                    imageVector = Icons.Default.KeyboardArrowRight,
+                                    contentDescription = null,
+                                    tint = Color.Gray,
+                                    modifier = Modifier.size(13.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
-        Spacer(modifier = Modifier.height(15.dp))
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MentorListPreview() {
-//    AcadeMateTheme {
-//        MentorListView(riwayat = arrayOf(1,2,3,4))
-//    }
-//}
