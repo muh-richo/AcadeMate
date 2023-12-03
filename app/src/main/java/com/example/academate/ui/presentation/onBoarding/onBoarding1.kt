@@ -48,11 +48,11 @@ fun onBoarding1(navController: NavController) {
         verticalArrangement = Arrangement.Bottom
     ){
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.logooo),
             contentDescription = "logo",
             modifier = Modifier
                 .padding(top = 150.dp)
-                .size(175.dp)
+                .size(250.dp)
         )
         Spacer(modifier = Modifier.height(150.dp))
         Text(

@@ -60,8 +60,6 @@ import androidx.navigation.NavController
 import com.example.academate.R
 import com.example.academate.navigate.Route
 import com.example.academate.ui.presentation.login_screen.UserViewModel
-import com.example.academate.ui.theme.Biru
-import com.example.academate.ui.theme.Putih
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

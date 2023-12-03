@@ -55,6 +55,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -170,6 +171,7 @@ fun SearchScreen(navController: NavController, matkulViewModel: CurrentMatkulVie
                 )
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
 
         // logic search
         if(shouldShowLazyColumn.value){
@@ -177,6 +179,13 @@ fun SearchScreen(navController: NavController, matkulViewModel: CurrentMatkulVie
             LazyColumn(){
                 items(matkul.size){item ->
                     if(matkul[item].item!!.namaMatkul == searchText){
+                        Text(
+                            text = "Menampilkan Hasil Pencarian :",
+                            modifier = Modifier
+                                .padding(start = 20.dp),
+                            fontSize = 12.sp,
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
                         DaftarMataKuliahDiminati(
                             painter = painterResource(id = R.drawable.matakuliah),
                             matakuliah = matkul[item].item!!.namaMatkul,

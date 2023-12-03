@@ -19,7 +19,6 @@ import com.example.academate.ui.presentation.mata_kuliah.MataKuliah
 import com.example.academate.ui.presentation.be_a_mentor.PemberitahuanBeMentor
 import com.example.academate.ui.presentation.profil.Profil
 import com.example.academate.ui.presentation.review.ReviewMentor
-import com.example.academate.ui.presentation.mentor.Riwayat
 import com.example.academate.ui.presentation.signup_screen.SignUp
 import com.example.academate.ui.presentation.onBoarding.SplashScreen
 import com.example.academate.ui.presentation.mata_kuliah.InformasiMatkul
