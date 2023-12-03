@@ -179,10 +179,10 @@ fun RiwayatScreen(navController: NavController, viewModel: UserViewModel){
                         .fillMaxWidth()
                         .background(
                             color = Color(0xFFEAEAEA),
-                            shape = RoundedCornerShape(corner = CornerSize(10.dp))
+                            shape = RoundedCornerShape(CornerSize(12.dp))
                         )
                         .border(1.dp, Color(0xF222222))
-                        .padding(horizontal = 7.dp, vertical = 11.dp),
+                        .padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ){
                     Box(
@@ -196,9 +196,9 @@ fun RiwayatScreen(navController: NavController, viewModel: UserViewModel){
                             modifier = Modifier
                         )
                     }
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
                     Column() {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Text(
                             text = matkul[currentRiwayat],
                             fontSize = 18.sp,
@@ -210,10 +210,11 @@ fun RiwayatScreen(navController: NavController, viewModel: UserViewModel){
                             lineHeight = 15.sp,
                             modifier = Modifier.padding(bottom = 6.dp)
                         )
+                        Spacer(modifier = Modifier.height(10.dp))
                         Row (
                             verticalAlignment = Alignment.CenterVertically
                         ){
-                            Spacer(modifier = Modifier.width(8.dp))
+//                            Spacer(modifier = Modifier.width(8.dp))
                             Text(text = waktu[currentRiwayat], fontSize = 10.sp)
                         }
                         Spacer(modifier = Modifier.height(8.dp))
@@ -246,13 +247,5 @@ fun RiwayatScreen(navController: NavController, viewModel: UserViewModel){
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
-
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-////                .padding(start = 20.dp, end = 20.dp)
-//        ){
-//
-//        }
     }
 }

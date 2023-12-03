@@ -163,7 +163,7 @@ fun DeskripsiMatkul(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp, 10.dp)
+                .padding(16.dp, 12.dp)
         ){
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -178,7 +178,7 @@ fun DeskripsiMatkul(
                     color = Color.DarkGray,
                     fontSize = 16.sp
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Deskripsi",
                     color = Color.Black,

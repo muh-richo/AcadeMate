@@ -195,12 +195,13 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
             modifier = Modifier
                 .padding(16.dp)
         ) {
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = namaLengkap,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
                 text = "Mata Kuliah",
                 fontSize = 18.sp,
@@ -209,9 +210,8 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
             Text(
                 text = matakuliah,
                 fontSize = 12.sp,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
             )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Pengalaman",
                 fontSize = 18.sp ,
@@ -220,10 +220,9 @@ fun DeskripsiMentor(namaLengkap: String, pengalaman: String, matakuliah: String)
             Text(
                 text = pengalaman,
                 fontSize = 12.sp,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
             )
-            var waktu by remember { mutableStateOf("") }
+            Spacer(modifier = Modifier.height(16.dp))
+//            var waktu by remember { mutableStateOf("") }
 //            OutlinedTextField(
 //                value = waktu,
 //                onValueChange = {waktu = it},

@@ -164,7 +164,7 @@ fun DaftarMentor(
                 text = "Menampilkan Mentor :",
                 modifier = Modifier
                     .alpha(0.5f)
-                    .padding(start = 20.dp, bottom = 12.dp),
+                    .padding(start = 20.dp, bottom = 8.dp),
                 fontSize = 12.sp,
             )
             var namaMentor by remember { mutableStateOf("") }
@@ -231,7 +231,7 @@ fun MentorListView(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(bottom = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
