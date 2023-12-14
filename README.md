@@ -1,6 +1,6 @@
 # AcadeMate
 
-Nama Anggota Kelompok
+Nama Anggota Kelompok :
 1. Arif Rama Putra Sa’id (215150201111064)
 2. Muhammad Richo Abadinata (215150200111037)
 3. Aziz Purnomo (215150207111063)
